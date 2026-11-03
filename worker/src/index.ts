@@ -2,9 +2,11 @@ import { log, logError } from './log';
 import { drainOutbox } from './outbox';
 import { runSource } from './pipeline';
 import { backfillVectors, processPending } from './process';
+import { buildDigest, weeklyMessages } from './reports';
 import { ALL_SOURCES, runScheduled } from './scheduler';
 import { sendMessage, tg } from './telegram/api';
 import { formatAlert } from './telegram/format';
+import { BOT_COMMANDS } from './telegram/commands';
 import { handleUpdate, type TgUpdate } from './telegram/webhook';
 import { classify, embed } from './ai';
 import { cosine } from './dedupe';
@@ -130,6 +132,14 @@ export default {
       return json({ model, results, dims, similarity });
     }
 
+    // Preview the digest / weekly report as text, without sending or marking anything.
+    if (path === '/admin/preview' && req.method === 'GET') {
+      const what = url.searchParams.get('what');
+      if (what === 'digest') return json({ messages: (await buildDigest(env)).messages });
+      if (what === 'weekly') return json({ messages: await weeklyMessages(env) });
+      return json({ error: 'use ?what=digest or ?what=weekly' }, 400);
+    }
+
     if (path === '/admin/status' && req.method === 'GET') {
       const sources = await env.DB.prepare('SELECT * FROM source_state ORDER BY source').all();
       const counts = await env.DB.prepare(
@@ -149,10 +159,3 @@ export default {
     await runScheduled(env, controller.scheduledTime).catch((e) => logError('tick', e));
   },
 } satisfies ExportedHandler<Env>;
-
-// Phase 1 registers the commands that exist now; phase 3 extends this list.
-export const BOT_COMMANDS = [
-  { command: 'start', description: 'Check that the bot is alive' },
-  { command: 'help', description: 'Show available commands' },
-  { command: 'status', description: 'Source health and counters' },
-];

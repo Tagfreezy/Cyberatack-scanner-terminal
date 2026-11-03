@@ -24,7 +24,7 @@ and (from phase 2) AI-classifies them, sends alerts to your Telegram bot, and
 |---|---|---|
 | 1 | Worker skeleton, D1 schema, RSS + CISA KEV + ransomware.live, keyword scoring, basic alerts | ✅ deployed |
 | 2 | Workers AI classification, dedupe into incidents, message editing, fallback | ✅ deployed |
-| 3 | Telegram commands, buttons, mutes, daily digest, weekly report | ⏳ |
+| 3 | Telegram commands, buttons, mutes, daily digest, weekly report | ✅ deployed |
 | 4 | JSON API + Textual terminal dashboard | ⏳ |
 | 5 | SANS ISC sensor data, spike alerts, optional sources | ⏳ |
 
@@ -168,3 +168,21 @@ a feed run 5–11 ms, a run with AI classification/dedupe up to ~35 ms (the AI a
 count; JSON/vector handling does). Every invocation so far completed with outcome `ok`. If Cloudflare
 ever starts rejecting runs, `npm run tail` shows `exceededCpu`; options are fewer items per tick
 (`AI_ITEMS_PER_RUN`) or the $5/month Workers Paid plan (30 s CPU).
+
+## Using the bot
+
+| Command | What it does |
+|---|---|
+| `/latest [n]` | newest incidents (default 10, max 25) |
+| `/today` | everything since local midnight, most severe first |
+| `/stats` | counts today / 7 days, top types, groups, sectors, countries |
+| `/week` | weekly report for the last 7 days (on demand) |
+| `/mute 2h` | quiet time (`30m`, `2h`, `1d`, `1w`; max 30 days). Held alerts land in the next digest |
+| `/unmute [name]` | end quiet time and group/vendor mutes (or only the one matching `name`) |
+| `/settings` | threshold, active mutes, schedule, AI status |
+| `/threshold 4` | instant alerts at this severity and above (1–5) |
+| `/status` | source health (🔴 if a source failed or hasn't run for 3× its interval) |
+
+Buttons on every alert: **ℹ️ More info** (AI explanation from the incident's reports, cached) and
+**🔇 Mute &lt;group/vendor&gt; (7d)**. Daily digest at **08:00** and weekly report **Monday 08:00**
+(Europe/Zurich, DST-safe: every 5-minute tick checks the local time instead of a fixed UTC hour).

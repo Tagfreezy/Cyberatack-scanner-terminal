@@ -1,6 +1,7 @@
 import { AiQuotaError, classify, embed, embeddingText, type Classification } from './ai';
 import { cosine, DEDUPE_WINDOW_MS, extractCve, findMatch, victimKey, type Candidate } from './dedupe';
 import { log, logError } from './log';
+import { loadMutes, muteStatus } from './mutes';
 import { scoreItem } from './scoring';
 import type { AttackType, Env, Item, ItemMeta } from './types';
 
@@ -46,6 +47,8 @@ interface CandidateRow extends Candidate {
   victim: string | null;
   sector: string | null;
   country: string | null;
+  group_name: string | null;
+  vendor: string | null;
 }
 
 interface PendingRow {
@@ -227,12 +230,14 @@ export async function processPending(
   // ---- 3. dedupe + store, one D1 batch per item --------------------------------------------
   const { results: candidates } = await env.DB.prepare(
     `SELECT id, victim_key, cve, first_seen, attack_type, severity, source_count, sources, alert_state,
-            telegram_message_id, classified_by, victim, sector, country
+            telegram_message_id, classified_by, victim, sector, country, group_name, vendor
      FROM incidents WHERE first_seen > ?`,
   )
     .bind(now - DEDUPE_WINDOW_MS)
     .all<CandidateRow>();
   const newVectors: { id: number; values: number[] }[] = [];
+  // Mutes decide alerts at queue time (and again at send time in outbox.ts).
+  const mutes = incidentIdx.length ? await loadMutes(env.DB, now) : [];
 
   // Vectorize applies writes asynchronously, and lag of ~10 min was observed. So vectors
   // of incidents from the last 30 min are also kept in D1 and compared here, in-memory.
@@ -312,8 +317,13 @@ export async function processPending(
       if (inc.alert_state === 'sent' && inc.telegram_message_id && (sourceAdded || severity !== inc.severity || upgrade)) {
         outbox = 'edit';
       } else if (['digest', 'none', 'baseline'].includes(inc.alert_state) && severity >= threshold && sourceAdded) {
-        outbox = 'alert';
-        alertState = 'queued';
+        const ms = muteStatus({ ...inc, attack_type: inc.attack_type }, mutes, now);
+        if (ms === 'muted') alertState = 'muted';
+        else if (ms === 'held') alertState = 'digest';
+        else {
+          outbox = 'alert';
+          alertState = 'queued';
+        }
       }
 
       // ?6 = "upgrade" flag, reused by three CASEs.
@@ -370,7 +380,8 @@ export async function processPending(
     }
 
     // ---- new incident ----
-    const alertState = d.severity >= threshold ? 'queued' : 'digest';
+    const ms = muteStatus({ attack_type: d.attackType, group_name: item.meta.group, vendor: item.meta.vendor, victim: d.victim }, mutes, now);
+    const alertState = ms === 'muted' ? 'muted' : d.severity >= threshold && !ms ? 'queued' : 'digest';
     const res = await env.DB.batch([
       env.DB.prepare(
         `INSERT INTO incidents (title, summary, url, attack_type, victim, group_name, vendor, sector, country, severity,
@@ -425,6 +436,8 @@ export async function processPending(
       victim: d.victim,
       sector: d.sector,
       country: d.country,
+      group_name: item.meta.group ?? null,
+      vendor: item.meta.vendor ?? null,
     });
     if (vec) newVectors.push({ id, values: vec });
     report.incidents++;

@@ -2,6 +2,7 @@ import { log, logError } from './log';
 import { drainOutbox } from './outbox';
 import { runSource } from './pipeline';
 import { backfillVectors, clearRecentVectors, expireVectors, processPending } from './process';
+import { maybeSendReports } from './reports';
 import { kevSource } from './sources/kev';
 import { newsSources } from './sources/news';
 import { ransomwareLiveSource } from './sources/ransomwarelive';
@@ -44,6 +45,8 @@ export async function runScheduled(env: Env, scheduledTime: number): Promise<voi
   // Each later stage is isolated too: a failure is logged, the next stage still runs.
   await step('process', () => processPending(env));
   if (slot(scheduledTime) % 6 === 0) await step('backfill', () => backfillVectors(env));
+  // Digest (daily) / weekly report: only does anything during the 08:xx Zurich hour.
+  await step('reports', () => maybeSendReports(env, scheduledTime));
   await step('outbox', () => drainOutbox(env));
   if (isCleanupSlot(scheduledTime)) await step('cleanup', () => cleanup(env));
 }

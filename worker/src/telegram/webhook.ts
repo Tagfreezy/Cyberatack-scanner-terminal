@@ -1,12 +1,30 @@
-import { log } from '../log';
+import { log, logError } from '../log';
 import type { Env } from '../types';
 import { sendMessage } from './api';
+import {
+  HELP,
+  cmdLatest,
+  cmdMute,
+  cmdSettings,
+  cmdStats,
+  cmdThreshold,
+  cmdToday,
+  cmdUnmute,
+  cmdWeek,
+  onMoreInfo,
+  onMute,
+} from './commands';
 import { escapeHtml, sourceLabel } from './format';
 
 export interface TgUpdate {
   update_id: number;
   message?: { message_id: number; chat: { id: number }; from?: { id: number }; text?: string };
-  callback_query?: { id: string; from: { id: number }; message?: { chat: { id: number } }; data?: string };
+  callback_query?: {
+    id: string;
+    from: { id: number };
+    message?: { message_id: number; chat: { id: number } };
+    data?: string;
+  };
 }
 
 /** Only the owner's chat is ever answered. Everyone else is silently ignored. */
@@ -14,36 +32,77 @@ export function isOwner(env: Env, chatId: number | undefined): boolean {
   return chatId !== undefined && String(chatId) === String(env.TELEGRAM_CHAT_ID).trim();
 }
 
-const HELP = [
-  '<b>CyberWatch</b> — live cyberattack monitor',
-  '',
-  '/status — source health and counters',
-  '/help — this message',
-  '',
-  'Alerts are AI-classified; the same attack from several outlets becomes one alert that',
-  'gets updated ("📰 3 sources") instead of new messages.',
-  '',
-  'More commands (/latest, /today, /mute, …) arrive in phase 3.',
-].join('\n');
+/** "/mute@MyBot 2h" → ["/mute", "2h"] */
+export function parseCommand(text: string): { cmd: string; arg?: string } {
+  const [first, ...rest] = text.trim().split(/\s+/);
+  return { cmd: (first ?? '').toLowerCase().replace(/@.*$/, ''), arg: rest.join(' ') || undefined };
+}
 
 export async function handleUpdate(env: Env, update: TgUpdate): Promise<void> {
+  const cb = update.callback_query;
+  if (cb) {
+    // Both the presser and the chat must be the owner.
+    if (!isOwner(env, cb.from.id) || !isOwner(env, cb.message?.chat.id)) {
+      log('webhook.ignored', { from: cb.from.id });
+      return;
+    }
+    const [action, idStr] = (cb.data ?? '').split(':');
+    const id = Number(idStr);
+    if (!Number.isInteger(id)) return;
+    if (action === 'info') await onMoreInfo(env, cb.id, id, cb.message?.message_id);
+    else if (action === 'mute') await onMute(env, cb.id, id);
+    return;
+  }
+
   const msg = update.message;
   if (!msg || !isOwner(env, msg.chat.id)) {
     if (msg) log('webhook.ignored', { chat: msg.chat.id });
     return;
   }
-  const cmd = (msg.text ?? '').trim().split(/\s+/)[0]!.toLowerCase().replace(/@.*$/, '');
-  switch (cmd) {
-    case '/start':
-    case '/help':
-      await sendMessage(env, HELP);
-      return;
-    case '/status':
-      await sendMessage(env, await statusText(env));
-      return;
-    default:
-      return;
+  const { cmd, arg } = parseCommand(msg.text ?? '');
+  let replies: string[] | null = null;
+  try {
+    switch (cmd) {
+      case '/start':
+      case '/help':
+        replies = [HELP];
+        break;
+      case '/status':
+        replies = [await statusText(env)];
+        break;
+      case '/latest':
+        replies = await cmdLatest(env, arg);
+        break;
+      case '/today':
+        replies = await cmdToday(env);
+        break;
+      case '/stats':
+        replies = await cmdStats(env);
+        break;
+      case '/week':
+        replies = await cmdWeek(env);
+        break;
+      case '/mute':
+        replies = await cmdMute(env, arg);
+        break;
+      case '/unmute':
+        replies = await cmdUnmute(env, arg);
+        break;
+      case '/settings':
+        replies = await cmdSettings(env);
+        break;
+      case '/threshold':
+        replies = await cmdThreshold(env, arg);
+        break;
+      default:
+        if (cmd.startsWith('/')) replies = ['Unknown command. /help lists them all.'];
+    }
+  } catch (err) {
+    logError('command', err, { cmd });
+    replies = ['⚠️ Something went wrong with that command. Try again in a minute.'];
   }
+  // Direct replies (not via the outbox): the user triggered them, so they're expected now.
+  for (const r of replies ?? []) await sendMessage(env, r);
 }
 
 /** 3× each source's schedule (see scheduler.ts): news 20 min, ransomware.live 15 min, KEV 1 h. */

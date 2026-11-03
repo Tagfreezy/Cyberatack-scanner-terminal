@@ -21,10 +21,14 @@ src/
     news.ts           Dark Reading, The Record, The Hacker News, SecurityWeek
     kev.ts            CISA KEV (streamed head only)
     ransomwarelive.ts ransomware.live RSS (default) or PRO API (with key)
+  reports.ts          daily digest + weekly report (SQL aggregation), 08:00-local trigger
+  mutes.ts            quiet time + group/vendor/victim mutes (pure matching, tested)
+  time.ts             Europe/Zurich local time via Intl (DST-safe), durations, ISO weeks
   telegram/
     api.ts            Bot API client
-    format.ts         HTML alert formatting (pure, tested)
-    webhook.ts        update handler (owner chat only)
+    format.ts         HTML formatting: alerts, keyboard, lists, digest, weekly (pure, tested)
+    commands.ts       /latest /today /stats /week /mute /unmute /settings /threshold + buttons
+    webhook.ts        update routing (owner chat only, for messages AND button presses)
 migrations/                schema (0001 all phases, 0002 AI/dedupe columns)
 test/                      vitest unit tests + real feed fixtures
 ```
@@ -136,5 +140,6 @@ peak a little but can't get every run under the nominal 10 ms (none were rejecte
 
 | Call | Does |
 |---|---|
-| `POST /admin/process` | run stage 2 now (`?backfill` also embeds old incidents) |
+| `POST /admin/process` | run stage 2 now (`?backfill` also embeds old incidents, `?n=K` items, `?nosend` skips Telegram) |
+| `GET /admin/preview?what=digest\|weekly` | render the digest / weekly report without sending |
 | `POST /admin/ai-eval` | `{model?, items?: [{title, summary, typeHint, meta}], embed?: [texts], embedModel?}` → classifications + similarity matrix |

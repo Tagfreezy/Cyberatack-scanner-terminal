@@ -188,3 +188,43 @@ export async function embed(env: Env, texts: string[]): Promise<number[][]> {
 export function embeddingText(title: string, rawSummary: string | null | undefined): string {
   return `${title}. ${(rawSummary ?? '').slice(0, 200)}`;
 }
+
+const EXPLAIN_PROMPT = `You are a cyber threat intelligence analyst briefing a technically literate reader.
+Using ONLY the reports below, write a short explanation in plain English (max 120 words), as 3 short labelled lines:
+What happened: ...
+Who is affected: ...
+Why it matters: ...
+If a detail is not in the reports, say it is not yet known. Do not invent names, numbers or dates. No markdown, no extra lines.`;
+
+/** "More info" button: a short grounded explanation built from the incident's reports. */
+export async function explainIncident(
+  env: Env,
+  inc: { title: string; summary: string | null; attack_type: string | null; victim: string | null; sector: string | null; country: string | null },
+  reports: { source: string; title: string; summary: string | null }[],
+): Promise<string | null> {
+  const context = [
+    `Incident: ${inc.title}`,
+    inc.summary ? `Summary: ${inc.summary}` : '',
+    `Type: ${inc.attack_type ?? 'unknown'} | Victim: ${inc.victim ?? 'unknown'} | Sector: ${inc.sector ?? 'unknown'} | Country: ${inc.country ?? 'unknown'}`,
+    '',
+    'Reports:',
+    ...reports.slice(0, 4).map((r, i) => `${i + 1}. [${r.source}] ${r.title}\n   ${(r.summary ?? '').slice(0, 500)}`),
+  ]
+    .filter((l) => l !== '')
+    .join('\n');
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const res = (await (env.AI as any).run(env.AI_MODEL, {
+      messages: [
+        { role: 'system', content: EXPLAIN_PROMPT },
+        { role: 'user', content: context },
+      ],
+      max_tokens: 260,
+      temperature: 0.2,
+    })) as { response?: string; choices?: { message?: { content?: string } }[] };
+    const text = (res.response ?? res.choices?.[0]?.message?.content ?? '').trim();
+    return text.length > 20 ? text.slice(0, 1500) : null;
+  } catch (err) {
+    throw quotaPause(err) ?? err;
+  }
+}

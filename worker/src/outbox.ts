@@ -1,6 +1,7 @@
 import { log, logError } from './log';
 import { editMessageText, sendMessage, TelegramError } from './telegram/api';
-import { formatAlert, type IncidentView } from './telegram/format';
+import { loadMutes, muteStatus } from './mutes';
+import { alertKeyboard, formatAlert, type IncidentView } from './telegram/format';
 import type { Env } from './types';
 
 // Rows come joined with their incident, so delivering N messages costs 1 + N D1 queries
@@ -26,7 +27,7 @@ export async function drainOutbox(env: Env, now = Date.now()): Promise<{ sent: n
   const { results } = await env.DB.prepare(
     `SELECT o.id AS outbox_id, o.kind, o.incident_id, o.payload, o.attempts,
             i.id, i.title, i.summary, i.url, i.attack_type, i.sector, i.country, i.severity,
-            i.source_count, i.sources, i.group_name, i.victim, i.telegram_message_id
+            i.source_count, i.sources, i.group_name, i.victim, i.vendor, i.telegram_message_id
      FROM outbox o LEFT JOIN incidents i ON i.id = o.incident_id
      WHERE o.sent_at IS NULL AND o.next_attempt_at <= ? AND o.attempts < ?
      ORDER BY o.id LIMIT ?`,
@@ -34,10 +35,25 @@ export async function drainOutbox(env: Env, now = Date.now()): Promise<{ sent: n
     .bind(now, MAX_ATTEMPTS, max)
     .all<OutboxRow>();
 
+  // Mutes are checked again at send time: an alert queued before a /mute must not go out.
+  const mutes = results.some((r) => r.kind === 'alert') ? await loadMutes(env.DB, now) : [];
+
   let sent = 0;
   let failed = 0;
-  for (const [i, row] of results.entries()) {
-    if (i > 0) await sleep(1100);
+  let delivered = 0;
+  for (const row of results) {
+    if (row.kind === 'alert' && row.id) {
+      const status = muteStatus({ attack_type: row.attack_type ?? null, group_name: row.group_name, vendor: row.vendor, victim: row.victim }, mutes, now);
+      if (status) {
+        // 'held' (quiet time) → into the digest; 'muted' (group/vendor) → silent.
+        await env.DB.batch([
+          env.DB.prepare('UPDATE outbox SET sent_at = ?, last_error = ? WHERE id = ?').bind(Date.now(), `skipped: ${status}`, row.outbox_id),
+          env.DB.prepare('UPDATE incidents SET alert_state = ? WHERE id = ?').bind(status === 'held' ? 'digest' : 'muted', row.id),
+        ]);
+        continue;
+      }
+    }
+    if (delivered++ > 0) await sleep(1100);
     try {
       const messageId = await deliver(env, row);
       const done = env.DB.prepare('UPDATE outbox SET sent_at = ?, attempts = attempts + 1 WHERE id = ?').bind(Date.now(), row.outbox_id);
@@ -77,16 +93,18 @@ async function deliver(env: Env, row: OutboxRow): Promise<number | null> {
 
   // Rendered from the *current* incident row, so a queued alert already shows the latest source count.
   const text = formatAlert(row as IncidentView);
+  // Edits must resend the keyboard, otherwise Telegram removes the buttons.
+  const reply_markup = alertKeyboard(row as IncidentView);
   if (row.kind === 'edit') {
     if (!row.telegram_message_id) return null;
     try {
-      await editMessageText(env, row.telegram_message_id, text);
+      await editMessageText(env, row.telegram_message_id, text, { reply_markup });
     } catch (err) {
       // "message is not modified" is fine; anything else bubbles up for retry.
       if (!(err instanceof TelegramError && /not modified/i.test(err.message))) throw err;
     }
     return null;
   }
-  const msg = await sendMessage(env, text);
+  const msg = await sendMessage(env, text, { reply_markup });
   return msg.message_id;
 }
