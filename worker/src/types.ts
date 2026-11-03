@@ -21,6 +21,10 @@ export interface Env {
   TELEGRAM_WEBHOOK_SECRET: string;
   API_TOKEN: string;
   RANSOMWARE_LIVE_API_KEY?: string;
+  // optional sources (phase 5)
+  MASTODON_INSTANCE: string;
+  MASTODON_ACCESS_TOKEN?: string;
+  THREATFOX_AUTH_KEY?: string;
 }
 
 export type TypeHint = 'news' | 'kev' | 'leak' | 'sensor' | 'social';

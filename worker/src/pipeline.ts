@@ -50,9 +50,12 @@ export async function runSource(env: Env, source: Source, now = Date.now()): Pro
     for (const item of fresh) {
       const score = scoreItem(item);
       if (baseline) {
-        stmts.push(...itemStatements(env.DB, item, score, 'baseline', 'baseline', now));
-      } else if (score.reasons[0] === 'noise') {
-        // Pre-filter: webinars, funding news, sponsored posts... never reach the AI.
+        // Social posts never become incidents without the AI (raw posts make bad titles).
+        const s = item.typeHint === 'social' ? { ...score, isIncident: false } : score;
+        stmts.push(...itemStatements(env.DB, item, s, 'baseline', 'baseline', now));
+      } else if (score.reasons[0] === 'noise' || (item.typeHint === 'social' && !score.isIncident)) {
+        // Pre-filter: webinars, funding news, sponsored posts... never reach the AI. Social posts
+        // are mostly chatter: they also need a keyword incident signal.
         filtered++;
         stmts.push(...itemStatements(env.DB, item, { ...score, isIncident: false }, 'filtered', 'digest', now));
       } else {

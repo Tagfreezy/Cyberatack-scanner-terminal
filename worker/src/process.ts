@@ -380,6 +380,16 @@ export async function processPending(
     }
 
     // ---- new incident ----
+    // A lone social post only becomes an incident if the AI rates it high; otherwise it can
+    // only corroborate incidents from real outlets (merge above). Its title is the AI summary.
+    if (item.typeHint === 'social' && d.severity < 4) {
+      report.rejected++;
+      await env.DB.prepare("UPDATE items SET status = 'rejected', severity = ?, attack_type = ? WHERE id = ?")
+        .bind(d.severity, d.attackType, item.id)
+        .run();
+      continue;
+    }
+    const incidentTitle = item.typeHint === 'social' && d.summary ? d.summary.slice(0, 200) : item.title;
     const ms = muteStatus({ attack_type: d.attackType, group_name: item.meta.group, vendor: item.meta.vendor, victim: d.victim }, mutes, now);
     const alertState = ms === 'muted' ? 'muted' : d.severity >= threshold && !ms ? 'queued' : 'digest';
     const res = await env.DB.batch([
@@ -388,7 +398,7 @@ export async function processPending(
            source_count, sources, classified_by, first_seen, last_seen, alert_state, cve, victim_key, vectorized, embedding)
          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?, ?, ?, ?, ?, ?, 0, ?) RETURNING id`,
       ).bind(
-        item.title,
+        incidentTitle,
         d.summary,
         item.url,
         d.attackType,

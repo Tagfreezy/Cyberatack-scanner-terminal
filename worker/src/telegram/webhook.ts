@@ -5,9 +5,11 @@ import {
   HELP,
   cmdLatest,
   cmdMute,
+  cmdSensors,
   cmdSettings,
   cmdStats,
   cmdThreshold,
+  cmdToggle,
   cmdToday,
   cmdUnmute,
   cmdWeek,
@@ -91,6 +93,12 @@ export async function handleUpdate(env: Env, update: TgUpdate): Promise<void> {
       case '/settings':
         replies = await cmdSettings(env);
         break;
+      case '/sensors':
+        replies = await cmdSensors(env);
+        break;
+      case '/toggle':
+        replies = await cmdToggle(env, arg);
+        break;
       case '/threshold':
         replies = await cmdThreshold(env, arg);
         break;
@@ -107,7 +115,7 @@ export async function handleUpdate(env: Env, update: TgUpdate): Promise<void> {
 
 /** 3× each source's schedule (see scheduler.ts): news 20 min, ransomware.live 15 min, KEV 1 h. */
 export function staleAfterMs(source: string): number {
-  return source === 'cisa-kev' ? 3 * 3600_000 : 3600_000;
+  return ['cisa-kev', 'sans-isc', 'threatfox'].includes(source) ? 3 * 3600_000 : 3600_000;
 }
 
 function ago(ms: number | null): string {

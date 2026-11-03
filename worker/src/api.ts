@@ -60,9 +60,15 @@ export async function handleApi(req: Request, env: Env, url: URL): Promise<Respo
   }
 
   if (path === '/api/sensors' && req.method === 'GET') {
-    const row = await env.DB.prepare("SELECT value FROM settings WHERE key = 'sensors_snapshot'").first<{ value: string }>();
-    // Filled by the SANS ISC source in phase 5.
-    return json(row ? JSON.parse(row.value) : { available: false, note: 'SANS ISC sensor data arrives in phase 5' });
+    const { results } = await env.DB.prepare(
+      "SELECT key, value FROM settings WHERE key IN ('sensors_snapshot', 'threatfox_snapshot')",
+    ).all<{ key: string; value: string }>();
+    const get = (k: string) => {
+      const v = results.find((r) => r.key === k)?.value;
+      return v ? (JSON.parse(v) as Record<string, unknown>) : null;
+    };
+    const sans = get('sensors_snapshot') ?? { available: false, note: 'waiting for the first SANS ISC run (hourly at :15)' };
+    return json({ ...sans, threatfox: get('threatfox_snapshot') });
   }
 
   // On-demand AI explanation for the dashboard's detail view (same cache as the Telegram button).

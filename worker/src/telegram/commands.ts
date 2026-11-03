@@ -3,7 +3,11 @@ import { getThreshold, setSetting } from '../db';
 import { logError } from '../log';
 import { BUTTON_MUTE_MS, loadMutes, muteTarget, type Mute } from '../mutes';
 import { INCIDENT_COLS, buildWeekly, dateLabel, weeklyMessages } from '../reports';
+import type { SensorsSnapshot } from '../sensors';
+import { SANS_ATTRIBUTION } from '../sources/sans';
+import type { ThreatFoxSnapshot } from '../sources/threatfox';
 import { formatDuration, localMidnight, parseDuration } from '../time';
+import { TOGGLES, loadToggles, type ToggleName } from '../toggles';
 import type { Env } from '../types';
 import { sendMessage, tg } from './api';
 import {
@@ -28,6 +32,8 @@ export const BOT_COMMANDS = [
   { command: 'unmute', description: 'End quiet time and all mutes' },
   { command: 'settings', description: 'Threshold, mutes, schedule' },
   { command: 'threshold', description: 'Instant-alert level 1-5' },
+  { command: 'sensors', description: 'SANS ISC: infocon, top attacked ports, spikes' },
+  { command: 'toggle', description: 'Spike alerts and optional sources on/off' },
   { command: 'status', description: 'Source health' },
   { command: 'help', description: 'All commands' },
 ];
@@ -43,6 +49,8 @@ export const HELP = [
   '/unmute — end quiet time and all group/vendor mutes',
   '/settings — threshold, mutes, schedule',
   '/threshold 4 — instant alerts at this severity and above (1-5)',
+  '/sensors — SANS ISC honeypot data: infocon, top attacked ports, spikes',
+  '/toggle [name] — spike/infocon alerts, Mastodon, ThreatFox on/off',
   '/status — source health',
   '',
   'Buttons on each alert: <b>More info</b> (AI explanation) and <b>Mute</b> (that ransomware group or vendor, 7 days).',
@@ -190,7 +198,7 @@ export async function cmdSettings(env: Env): Promise<string[]> {
       '',
       '<b>Sources</b>',
       'Dark Reading, The Record, The Hacker News, SecurityWeek, CISA KEV, ransomware.live',
-      'Optional (phase 5): SANS ISC sensors, Mastodon, ThreatFox: off',
+      ...(await toggleLines(env)),
     ].join('\n'),
   ];
 }
@@ -285,4 +293,78 @@ export async function onMute(env: Env, callbackId: string, incidentId: number): 
     text: `🔇 ${target.label} muted for 7 days. /unmute ${target.value} to undo.`,
     show_alert: false,
   });
+}
+
+// ---------------------------------------------------------------------------------------
+// Phase 5: sensors + toggles
+
+async function toggleLines(env: Env): Promise<string[]> {
+  const t = await loadToggles(env);
+  return [
+    'SANS ISC sensors: hourly',
+    '',
+    '<b>Toggles</b> (/toggle name)',
+    ...(Object.entries(TOGGLES) as [ToggleName, (typeof TOGGLES)[ToggleName]][]).map(([name, def]) => {
+      const missing = 'needs' in def && def.needs && !env[def.needs];
+      const state = t[name] ? '🟢 on' : missing ? `⚪ off (needs ${def.needs})` : '⚪ off';
+      return `${state} · <code>${name}</code> — ${escapeHtml(def.label)}`;
+    }),
+  ];
+}
+
+export async function cmdToggle(env: Env, arg?: string): Promise<string[]> {
+  const name = arg?.trim().toLowerCase() as ToggleName | undefined;
+  if (!name || !(name in TOGGLES)) {
+    return [['Usage: <code>/toggle spikes</code>', '', ...(await toggleLines(env)).slice(2)].join('\n')];
+  }
+  const def = TOGGLES[name];
+  const current = (await loadToggles(env))[name];
+  if (!current && 'needs' in def && def.needs && !env[def.needs]) {
+    return [
+      `⚪ <b>${escapeHtml(def.label)}</b> needs the <code>${def.needs}</code> secret first.\n` +
+        `Set it with <code>npx wrangler secret put ${def.needs}</code> (see the README), then /toggle ${name} again.`,
+    ];
+  }
+  const stmts = [setSettingStmt(env, def.key, current ? '0' : '1')];
+  if (current && (name === 'mastodon' || name === 'threatfox')) {
+    // Turning a source off: forget its health row so /status doesn't show it as broken.
+    stmts.push(env.DB.prepare('DELETE FROM source_state WHERE source = ?').bind(name));
+    if (name === 'threatfox') stmts.push(env.DB.prepare("DELETE FROM settings WHERE key = 'threatfox_snapshot'"));
+  }
+  await env.DB.batch(stmts);
+  return [`${current ? '⚪ Off' : '🟢 On'}: ${escapeHtml(def.label)}`];
+}
+
+function setSettingStmt(env: Env, key: string, value: string): D1PreparedStatement {
+  return env.DB.prepare('INSERT INTO settings (key, value) VALUES (?1, ?2) ON CONFLICT(key) DO UPDATE SET value = ?2').bind(key, value);
+}
+
+export async function cmdSensors(env: Env): Promise<string[]> {
+  const { results } = await env.DB.prepare(
+    "SELECT key, value FROM settings WHERE key IN ('sensors_snapshot', 'threatfox_snapshot')",
+  ).all<{ key: string; value: string }>();
+  const snap = results.find((r) => r.key === 'sensors_snapshot');
+  if (!snap) return ['No sensor data yet: the SANS ISC job runs hourly at :15.'];
+  const d = JSON.parse(snap.value) as SensorsSnapshot;
+  const icon: Record<string, string> = { green: '🟢', yellow: '🟡', orange: '🟠', red: '🔴' };
+  const lines = [
+    '<b>SANS ISC honeypot sensors</b>',
+    `Infocon: ${icon[d.infocon ?? ''] ?? '⚪'} <b>${escapeHtml((d.infocon ?? 'unknown').toUpperCase())}</b>`,
+    '',
+    `<b>Top attacked ports</b> (${escapeHtml(d.date)} UTC, so far)`,
+  ];
+  for (const p of d.top_ports.slice(0, 10)) {
+    const spike = d.spikes.find((s) => s.port === p.port);
+    lines.push(
+      `${String(p.rank).padStart(2)}. <b>${p.port}</b>${p.service ? ` ${escapeHtml(p.service)}` : ''} · ${p.records.toLocaleString('en-US')} reports${spike ? ` · ⚠️ ${spike.isNew ? 'new' : `${spike.factor}×`}` : ''}`,
+    );
+  }
+  lines.push('', d.spikes.length ? `⚠️ <b>${d.spikes.length} spike(s)</b> vs the last ${d.history_days} days` : `No spikes vs the last ${d.history_days} days.`);
+  const tf = results.find((r) => r.key === 'threatfox_snapshot');
+  if (tf) {
+    const t = JSON.parse(tf.value) as ThreatFoxSnapshot;
+    lines.push('', `<b>ThreatFox malware families</b> (latest ${t.sampled} IOCs)`, t.families.map((f) => `${escapeHtml(f.name)} ${f.n}`).join(' · '));
+  }
+  lines.push('', `<i>${SANS_ATTRIBUTION}</i>`);
+  return [lines.join('\n')];
 }

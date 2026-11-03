@@ -76,6 +76,9 @@ const SOURCE_LABEL: Record<string, string> = {
   securityweek: 'SecurityWeek',
   'cisa-kev': 'CISA KEV',
   'ransomware.live': 'ransomware.live',
+  'sans-isc': 'SANS ISC sensors',
+  mastodon: 'Mastodon',
+  threatfox: 'ThreatFox',
 };
 
 export function sourceLabel(s: string): string {

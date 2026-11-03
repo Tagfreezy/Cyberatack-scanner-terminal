@@ -42,7 +42,9 @@
     "TIMEZONE": "Europe/Zurich",
     "USER_AGENT": "cyberwatch/1.0",
     "MAX_TELEGRAM_SENDS_PER_RUN": "4",
-    "RSS_MAX_ITEMS": "20"
+    "RSS_MAX_ITEMS": "20",
+    // Optional Mastodon source (needs the MASTODON_ACCESS_TOKEN secret + /toggle mastodon)
+    "MASTODON_INSTANCE": "infosec.exchange"
   },
 
   "observability": { "enabled": true }
