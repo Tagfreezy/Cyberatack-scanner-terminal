@@ -15,6 +15,8 @@ export const ALL_SOURCES: Source[] = [...newsSources, ransomwareLiveSource, kevS
  *   - one news feed per tick, rotating → each feed every 20 min
  *   - ransomware.live every 15 min (well within its rate limit)
  *   - CISA KEV once an hour (304 / unchanged-check makes most runs free)
+ * Budget per tick (free plan: 50 D1 queries, 50 subrequests): each source ≈ 5 D1 queries
+ * (db.batch counts as one) + 1 fetch; the outbox ≤ 16 queries + 5 Telegram calls.
  * Slots are computed from the trigger's scheduledTime (not Date.now()), so a delayed run
  * still does the job it was meant for.
  */

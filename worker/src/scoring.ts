@@ -35,6 +35,9 @@ const SOFT_NOISE =
 const CRITICAL_SECTOR =
   /\bhospitals?\b|\bhealth ?care\b|\bmedical\b|\bgovernment\b|\bministry\b|\bfederal\b|\bmilitary\b|\bdefen[cs]e\b|\bairports?\b|\bairlines?\b|\benergy\b|\bpower grid\b|\butility\b|\bwater\b|\bpipeline\b|\bnuclear\b|\bbanks?\b|\btelecoms?\b|\belection\b|\bcritical infrastructure\b/i;
 
+const LEAK_CRITICAL =
+  /\bhospitals?\b|\bhealth ?(system|care network)\b|\bmedical cent(er|re)\b|\bgovernment (administration|agency|department)\b|\b(local|state|federal|national) government\b|\bministry\b|\bmunicipality\b|\bcity of\b|\b(county|city) (government|council|sheriff|commission)\b|\bcounty of\b|\bschool district\b|\bpolice\b|\bairport\b|\butility company\b|\bpower (company|utility)\b/i;
+
 const LARGE_SCALE =
   /\b\d+(\.\d+)?\s*(million|billion|m)\b|\b\d{3},\d{3}\b|\bmillions\b|\bnationwide\b|\bworldwide\b|\bglobal(ly)?\b|\bmass(ive)?\b|\bwidespread\b|\bthousands of\b/i;
 
@@ -65,7 +68,10 @@ export function scoreItem(item: Item): Score {
   }
 
   if (item.typeHint === 'leak') {
-    const critical = CRITICAL_SECTOR.test(`${item.summary} ${item.meta.sector ?? ''}`);
+    // Leak-site blurbs are long company descriptions, so the broad sector list would fire on
+    // ~10% of posts ("water treatment", "defense attorneys"). Only public-impact victims bump.
+    const head = `${item.meta.victim ?? ''} ${item.meta.sector ?? ''} ${item.summary.slice(0, 160)}`;
+    const critical = LEAK_CRITICAL.test(head);
     return {
       isIncident: true,
       attackType: 'ransomware',

@@ -135,7 +135,7 @@ Useful admin calls (all need the bearer token):
 | Call | Does |
 |---|---|
 | `GET /admin/status` | source health, counters |
-| `POST /admin/run?source=all` | run sources now (or `?source=bleepingcomputer`, `cisa-kev`, `ransomware.live`, …) |
+| `POST /admin/run?source=ransomware.live` | run one source now (`bleepingcomputer`, `therecord`, `thehackernews`, `securityweek`, `cisa-kev`, `ransomware.live`). Prefer one at a time: `?source=all` also works but puts every source into one invocation, close to the free plan's 50-D1-queries limit |
 | `POST /admin/test-alert` | send a sample alert |
 | `POST /admin/setup-webhook` | (re)register webhook + commands |
 

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { scoreItem } from '../src/scoring';
 import { parseNewsFeed } from '../src/sources/news';
+import { parseRansomwareLiveRss } from '../src/sources/ransomwarelive';
 import { fixture, newsItem } from './helpers';
 
 describe('keyword scoring', () => {
@@ -83,6 +84,12 @@ describe('keyword scoring', () => {
     const leak = newsItem('Qilin claims attack on Foo', 'Foo makes widgets.', { typeHint: 'leak', meta: { group: 'Qilin' } });
     expect(scoreItem(leak)).toMatchObject({ isIncident: true, attackType: 'ransomware', severity: 3 });
     expect(scoreItem({ ...leak, summary: 'Regional hospital in Ohio.' }).severity).toBe(4);
+  });
+
+  it('does not flood alerts from leak sites: real feed → only public-impact victims at 4', () => {
+    const items = parseRansomwareLiveRss(fixture('ransomwarelive.xml'), 40);
+    const high = items.filter((i) => scoreItem(i).severity >= 4).map((i) => i.meta.victim);
+    expect(high).toEqual(['City of Edgewater']);
   });
 
   it('on a real feed, filters some items and keeps some', () => {
