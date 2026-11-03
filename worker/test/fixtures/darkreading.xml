@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xml:base="https://www.darkreading.com"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:atom="http://www.w3.org/2005/Atom"
+    xmlns:media="http://search.yahoo.com/mrss/"
+    xmlns:content="http://purl.org/rss/1.0/modules/content/">
+    <channel>
+        <title>darkreading</title>
+        <link>https://www.darkreading.com</link>
+        <description>Public RSS feed</description>
+                <language>en</language>
+        <atom:link href="https://www.darkreading.com/feeds/rss.xml" rel="self" type="application/rss+xml" />
+                 <item>
+            <title><![CDATA[9 Cyber Awareness Tips That Actually Match Today's Maze of Threats]]></title>
+            <link><![CDATA[https://www.darkreading.com/cyber-risk/9-cyber-awareness-tips-todays-maze-threats]]></link>
+                        <description><![CDATA[Practical guidance on safer search, stronger login security, better executive protection, and other habits that help reduce enterprise risk.]]></description>
+                                                        <pubDate>Tue, 03 Nov 2026 15:38:20 GMT</pubDate>
+                                                                <dc:creator>Tara Seals</dc:creator>
+                                    <guid isPermaLink="false"><![CDATA[https://www.darkreading.com/cyber-risk/9-cyber-awareness-tips-todays-maze-threats]]></guid>
+                             
+                <media:thumbnail url="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/blt73242ae0d40b68c0/6aea0c8226a0725a0631618d/maze-mikkelwilliam-GettyImages-1420679447.jpg?width=720&amp;quality=80&amp;disable=upscale" />
+                <media:content url="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/blt73242ae0d40b68c0/6aea0c8226a0725a0631618d/maze-mikkelwilliam-GettyImages-1420679447.jpg?width=720&amp;quality=80&amp;disable=upscale" medium="image">
+                    <media:title type="html">maze-mikkelwilliam-GettyImages-1420679447.jpg</media:title>
+                </media:content>
+                                    </item><item>
+            <title><![CDATA[LLMjacking Emerges as Thriving Cybercriminal Enterprise]]></title>
+            <link><![CDATA[https://www.darkreading.com/cloud-security/llmjacking-thriving-cybercriminal-enterprise]]></link>
+                        <description><![CDATA[Cybercriminals have turned reselling cloud access to LLMs into a lucrative business model, with some victims paying as much as $1 million in resource consumption before access was revoked.]]></description>
+                                                        <pubDate>Tue, 03 Nov 2026 15:35:50 GMT</pubDate>
+                                                                <dc:creator>Elizabeth Montalbano</dc:creator>
+                                    <guid isPermaLink="false"><![CDATA[https://www.darkreading.com/cloud-security/llmjacking-thriving-cybercriminal-enterprise]]></guid>
+                             
+                <media:thumbnail url="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/bltbc06310368e21110/6a4bdbe6a6d4757864059ce1/llm-Boy_Wirat-Getty-2149059417.jpg?width=720&amp;quality=80&amp;disable=upscale" />
+                <media:content url="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/bltbc06310368e21110/6a4bdbe6a6d4757864059ce1/llm-Boy_Wirat-Getty-2149059417.jpg?width=720&amp;quality=80&amp;disable=upscale" medium="image">
+                    <media:title type="html">llm-Boy_Wirat-Getty-2149059417.jpg</media:title>
+                </media:content>
+                                    </item><item>
+            <title><![CDATA[3AM Affiliate Embraces AI-Like Loops in European School Attack]]></title>
+            <link><![CDATA[https://www.darkreading.com/data-privacy/3am-affiliate-ai-loops-european-school-attack]]></link>
+                        <description><![CDATA[Evidence suggests a model may have generated and revised commands during the ransom gang's breach, though researchers stopped short of claiming full automation.]]></description>
+                                                        <pubDate>Tue, 03 Nov 2026 14:00:00 GMT</pubDate>
+                                                                <dc:creator>Alexander Culafi</dc:creator>
+                                    <guid isPermaLink="false"><![CDATA[https://www.darkreading.com/data-privacy/3am-affiliate-ai-loops-european-school-attack]]></guid>
+                             
+                <media:thumbnail url="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/blta280e1d9bd26c729/6ae8fcfdb20def7a8ae983ea/school_front-YinYang-GettyImages-157476686.jpg?width=720&amp;quality=80&amp;disable=upscale" />
+                <media:content url="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/blta280e1d9bd26c729/6ae8fcfdb20def7a8ae983ea/school_front-YinYang-GettyImages-157476686.jpg?width=720&amp;quality=80&amp;disable=upscale" medium="image">
+                    <media:title type="html">school_front-YinYang-GettyImages-157476686.jpg</media:title>
+                </media:content>
+                                    </item><item>
+            <title><![CDATA[One Compromised Laptop, Billions Lost: The Binance Attack-Path Warning]]></title>
+            <link><![CDATA[https://www.darkreading.com/cyberattacks-data-breaches/binance-hack-test-attack-paths]]></link>
+                        <description><![CDATA[The record theft shows how weak system separation, inadequate controls, and untested attack possibilities can turn one breach into systemic loss.]]></description>
+                                                        <pubDate>Mon, 02 Nov 2026 22:27:24 GMT</pubDate>
+                                                                <dc:creator>Jai Vijayan</dc:creator>
+                                    <guid isPermaLink="false"><![CDATA[https://www.darkreading.com/cyberattacks-data-breaches/binance-hack-test-attack-paths]]></guid>
+                             
+                <media:thumbnail url="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/blt5a6c898e92d21e63/6ae8ffda91cb5739c41bd1e1/binance_creativetan_shutterstock.jpg?width=720&amp;quality=80&amp;disable=upscale" />
+                <media:content url="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/blt5a6c898e92d21e63/6ae8ffda91cb5739c41bd1e1/binance_creativetan_shutterstock.jpg?width=720&amp;quality=80&amp;disable=upscale" medium="image">
+                    <media:title type="html">binance_creativetan_shutterstock.jpg</media:title>
+                </media:content>
+                                    </item><item>
+            <title><![CDATA[Microsoft's AI Risk Report Misses This Key Detail]]></title>
+            <link><![CDATA[https://www.darkreading.com/cyberattacks-data-breaches/microsoft-ai-cyber-risk-report-miss]]></link>
+                        <description><![CDATA[The latest &quot;Digital Defense Report&quot; identifies government agencies as prime targets for AI attacks but doesn't mention that they are broadly being targeted through Microsoft bugs.]]></description>
+                                                        <pubDate>Mon, 02 Nov 2026 15:00:00 GMT</pubDate>
+                                                                <dc:creator>Andrew Grotto</dc:creator>
+                                    <guid isPermaLink="false"><![CDATA[https://www.darkreading.com/cyberattacks-data-breaches/microsoft-ai-cyber-risk-report-miss]]></guid>
+                             
+                <media:thumbnail url="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/blt569484121108a889/6ae4e02ada596cc80722963c/AI-Saksit_Sangtong-Getty-2225595754.jpg?width=720&amp;quality=80&amp;disable=upscale" />
+                <media:content url="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/blt569484121108a889/6ae4e02ada596cc80722963c/AI-Saksit_Sangtong-Getty-2225595754.jpg?width=720&amp;quality=80&amp;disable=upscale" medium="image">
+                    <media:title type="html">AI-Saksit_Sangtong-Getty-2225595754.jpg</media:title>
+                </media:content>
+                                    </item><item>
+            <title><![CDATA[PapRAT Cyber-Espionage Campaign Leaves a 'Bitter' Taste in South Asia]]></title>
+            <link><![CDATA[https://www.darkreading.com/cyberattacks-data-breaches/paprat-cyberespionage-campaign-bitter-south-asia]]></link>
+                        <description><![CDATA[Organizations in the region face growing cyberattacks from the known India-linked threat group, which leverages legitimate Windows functionality in three distinct attack chains.]]></description>
+                                                        <pubDate>Mon, 02 Nov 2026 14:00:00 GMT</pubDate>
+                                                                <dc:creator>Elizabeth Montalbano</dc:creator>
+                                    <guid isPermaLink="false"><![CDATA[https://www.darkreading.com/cyberattacks-data-breaches/paprat-cyberespionage-campaign-bitter-south-asia]]></guid>
+                             
+                <media:thumbnail url="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/blt5084e1dd5e7db648/6ae882291b7efb363cec70fb/rat-David_Chapman-Alamy.jpg?width=720&amp;quality=80&amp;disable=upscale" />
+                <media:content url="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/blt5084e1dd5e7db648/6ae882291b7efb363cec70fb/rat-David_Chapman-Alamy.jpg?width=720&amp;quality=80&amp;disable=upscale" medium="image">
+                    <media:title type="html">rat-David_Chapman-Alamy.jpg</media:title>
+                </media:content>
+                                    </item><item>
+            <title><![CDATA[Investors Dish on New Startups &amp; What They'd Back Next]]></title>
+            <link><![CDATA[https://www.darkreading.com/cybersecurity-operations/investors-dish-new-startsup-what-back-next]]></link>
+                        <description><![CDATA[The cybersecurity market is difficult to predict, but a glimpse into the annual DataTribe Challenge shows what's trending and what's not.]]></description>
+                                                        <pubDate>Fri, 30 Oct 2026 21:08:25 GMT</pubDate>
+                                                                <dc:creator>Arielle Waldman</dc:creator>
+                                    <guid isPermaLink="false"><![CDATA[https://www.darkreading.com/cybersecurity-operations/investors-dish-new-startsup-what-back-next]]></guid>
+                             
+                <media:thumbnail url="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/blt7bfb23bb01b12a77/6ae89a88a47bac182d509a42/DataTribe_Challenge.jpg?width=720&amp;quality=80&amp;disable=upscale" />
+                <media:content url="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/blt7bfb23bb01b12a77/6ae89a88a47bac182d509a42/DataTribe_Challenge.jpg?width=720&amp;quality=80&amp;disable=upscale" medium="image">
+                    <media:title type="html">DataTribe_Challenge.jpg</media:title>
+                </media:content>
+                                    </item><item>
+            <title><![CDATA[Devs Hit by Trojanized Claude Code Extension for Cursor]]></title>
+            <link><![CDATA[https://www.darkreading.com/cyberattacks-data-breaches/devs-trojanized-claude-code-extension-cursor]]></link>
+                        <description><![CDATA[Two serious security issues hit Cursor on the same day, highlighting the risks for AI-powered integrated development environments (IDEs).]]></description>
+                                                        <pubDate>Fri, 30 Oct 2026 20:05:58 GMT</pubDate>
+                                                                <dc:creator>Nate Nelson</dc:creator>
+                                    <guid isPermaLink="false"><![CDATA[https://www.darkreading.com/cyberattacks-data-breaches/devs-trojanized-claude-code-extension-cursor]]></guid>
+                             
+                <media:thumbnail url="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/blt5af13434263526c5/6ae4e524fd7d52bad0112be2/Package_trap-Alina_Naumova-Getty.jpg?width=720&amp;quality=80&amp;disable=upscale" />
+                <media:content url="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/blt5af13434263526c5/6ae4e524fd7d52bad0112be2/Package_trap-Alina_Naumova-Getty.jpg?width=720&amp;quality=80&amp;disable=upscale" medium="image">
+                    <media:title type="html">Package_trap-Alina_Naumova-Getty.jpg</media:title>
+                </media:content>
+                                    </item><item>
+            <title><![CDATA[Behind the Scenes of How Operation Blackout Went Down]]></title>
+            <link><![CDATA[https://www.darkreading.com/cybersecurity-operations/behind-the-scenes-how-operation-blackout-went-down]]></link>
+                        <description><![CDATA[A recent law enforcement operation to dismantle harmful scam centers was a big success. A threat intelligence expert walks us through what happened and why he wants more of the same.]]></description>
+                                                        <pubDate>Fri, 30 Oct 2026 19:46:08 GMT</pubDate>
+                                                                <dc:creator>Arielle Waldman</dc:creator>
+                                    <guid isPermaLink="false"><![CDATA[https://www.darkreading.com/cybersecurity-operations/behind-the-scenes-how-operation-blackout-went-down]]></guid>
+                             
+                <media:thumbnail url="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/blted8eeb1e23f7df84/6ae3bbdee7e856ef65896aec/GettyImages-1294781573.jpg?width=720&amp;quality=80&amp;disable=upscale" />
+                <media:content url="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/blted8eeb1e23f7df84/6ae3bbdee7e856ef65896aec/GettyImages-1294781573.jpg?width=720&amp;quality=80&amp;disable=upscale" medium="image">
+                    <media:title type="html">GettyImages-1294781573.jpg</media:title>
+                </media:content>
+                                    </item><item>
+            <title><![CDATA[L’Italia è afflitta da vulnerabilità informatiche, senza una causa chiara]]></title>
+            <link><![CDATA[https://www.darkreading.com/cybersecurity-analytics/cyber-vulnerabilities-besiege-italy-italian]]></link>
+                        <description><![CDATA[I ricercatori non riescono a spiegare del tutto perché le minacce informatiche in Italia siano così diverse rispetto a quelle di qualsiasi altro Paese.]]></description>
+                                                        <pubDate>Fri, 30 Oct 2026 15:39:54 GMT</pubDate>
+                                                                <dc:creator>Nate Nelson</dc:creator>
+                                    <guid isPermaLink="false"><![CDATA[https://www.darkreading.com/cybersecurity-analytics/cyber-vulnerabilities-besiege-italy-italian]]></guid>
+                             
+                <media:thumbnail url="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/blt0dafcf0847efff9a/6ae24fff8ec8cff4371f87c5/rome-Sean_Gallup-GettyImages-623337092jpg.jpg?width=720&amp;quality=80&amp;disable=upscale" />
+                <media:content url="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/blt0dafcf0847efff9a/6ae24fff8ec8cff4371f87c5/rome-Sean_Gallup-GettyImages-623337092jpg.jpg?width=720&amp;quality=80&amp;disable=upscale" medium="image">
+                    <media:title type="html">rome-Sean_Gallup-GettyImages-623337092jpg.jpg</media:title>
+                </media:content>
+                                    </item><item>
+            <title><![CDATA[Undead Software Projects Continue to Raise Security Risks]]></title>
+            <link><![CDATA[https://www.darkreading.com/application-security/undead-software-projects-raise-security-risks]]></link>
+                        <description><![CDATA[A security firm patched a decade-old app to prevent the takeover of millions of machines, highlighting that abandoned domains remain a boon to attackers.]]></description>
+                                                        <pubDate>Fri, 30 Oct 2026 14:10:37 GMT</pubDate>
+                                                                <dc:creator>Robert Lemos</dc:creator>
+                                    <guid isPermaLink="false"><![CDATA[https://www.darkreading.com/application-security/undead-software-projects-raise-security-risks]]></guid>
+                             
+                <media:thumbnail url="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/bltd40811c92b905082/6ae3b49914ffedf86f1c84cc/zombies-in-graveyard-zef_art-shutterstock.jpg?width=720&amp;quality=80&amp;disable=upscale" />
+                <media:content url="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/bltd40811c92b905082/6ae3b49914ffedf86f1c84cc/zombies-in-graveyard-zef_art-shutterstock.jpg?width=720&amp;quality=80&amp;disable=upscale" medium="image">
+                    <media:title type="html">zombies-in-graveyard-zef_art-shutterstock.jpg</media:title>
+                </media:content>
+                                    </item><item>
+            <title><![CDATA[As Russia's Cyberwar Evolves, Belarus Steps Forward]]></title>
+            <link><![CDATA[https://www.darkreading.com/physical-security/russia-cyber-war-belarus-steps-forward]]></link>
+                        <description><![CDATA[The &quot;FrostyNeighbor&quot; advanced persistent threat (APT) launched a destructive attack in Ukraine and is raising concerns about deeper alignment with Russian cyber objectives.]]></description>
+                                                        <pubDate>Fri, 30 Oct 2026 08:00:00 GMT</pubDate>
+                                                                <dc:creator>Alexander Culafi</dc:creator>
+                                    <guid isPermaLink="false"><![CDATA[https://www.darkreading.com/physical-security/russia-cyber-war-belarus-steps-forward]]></guid>
+                             
+                <media:thumbnail url="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/bltd600d33b7bbbc448/6ae39a9b20628a26ab67c66f/Belarus_Russia_flags-Oleksii_Liskonih-GettyImages-1089909770.jpg?width=720&amp;quality=80&amp;disable=upscale" />
+                <media:content url="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/bltd600d33b7bbbc448/6ae39a9b20628a26ab67c66f/Belarus_Russia_flags-Oleksii_Liskonih-GettyImages-1089909770.jpg?width=720&amp;quality=80&amp;disable=upscale" medium="image">
+                    <media:title type="html">Belarus_Russia_flags-Oleksii_Liskonih-GettyImages-1089909770.jpg</media:title>
+                </media:content>
+                                    </item><item>
+            <title><![CDATA[Anthropic-Themed Phishing Emails Bypass Top Security Tools]]></title>
+            <link><![CDATA[https://www.darkreading.com/cyberattacks-data-breaches/anthropic-phishing-emails-bypass-security-tools]]></link>
+                        <description><![CDATA[Obvious phishing emails with numerous red flags are somehow getting past some of the industry-leading secure email gateway (SEG) products.]]></description>
+                                                        <pubDate>Thu, 29 Oct 2026 21:21:56 GMT</pubDate>
+                                                                <dc:creator>Nate Nelson</dc:creator>
+                                    <guid isPermaLink="false"><![CDATA[https://www.darkreading.com/cyberattacks-data-breaches/anthropic-phishing-emails-bypass-security-tools]]></guid>
+                             
+                <media:thumbnail url="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/bltfbdba6806da96431/6ae3993ee7e856faec896a9e/Mask-beast01-Getty.jpg?width=720&amp;quality=80&amp;disable=upscale" />
+                <media:content url="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/bltfbdba6806da96431/6ae3993ee7e856faec896a9e/Mask-beast01-Getty.jpg?width=720&amp;quality=80&amp;disable=upscale" medium="image">
+                    <media:title type="html">Mask-beast01-Getty.jpg</media:title>
+                </media:content>
+                                    </item><item>
+            <title><![CDATA[Rethinking Cybersecurity Awareness in the AI Era]]></title>
+            <link><![CDATA[https://www.darkreading.com/cyber-risk/rethinking-cybersecurity-awareness-ai-era]]></link>
+                        <description><![CDATA[This installment of the Reporters' Notebook video series discusses some of the trends and topics from Cybersecurity Awareness Month, from using AI for better training to educating next-generation workforces on modern risks and emerging threats.]]></description>
+                                                        <pubDate>Thu, 29 Oct 2026 20:15:37 GMT</pubDate>
+                                                                <dc:creator>Rob Wright</dc:creator>
+                                    <guid isPermaLink="false"><![CDATA[https://www.darkreading.com/cyber-risk/rethinking-cybersecurity-awareness-ai-era]]></guid>
+                             
+                <media:thumbnail url="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/bltcc4390b0f2e6c554/6ae3b02dfe80872ab5936fa3/cybersecuritytraining-_Maria_Vonotna-Getty-1351111419.jpg?width=720&amp;quality=80&amp;disable=upscale" />
+                <media:content url="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/bltcc4390b0f2e6c554/6ae3b02dfe80872ab5936fa3/cybersecuritytraining-_Maria_Vonotna-Getty-1351111419.jpg?width=720&amp;quality=80&amp;disable=upscale" medium="image">
+                    <media:title type="html">cybersecuritytraining-_Maria_Vonotna-Getty-1351111419.jpg</media:title>
+                </media:content>
+                                    </item><item>
+            <title><![CDATA[Why CTF Competitions May Be More Important Than Ever]]></title>
+            <link><![CDATA[https://www.darkreading.com/cybersecurity-operations/why-ctf-more-important-than-ever]]></link>
+                        <description><![CDATA[As artificial intelligence squeezes early-career learning opportunities, capture-the-flag contests could be one way to help pick up the slack.]]></description>
+                                                        <pubDate>Thu, 29 Oct 2026 19:56:44 GMT</pubDate>
+                                                                <dc:creator>Ericka Chickowski</dc:creator>
+                                    <guid isPermaLink="false"><![CDATA[https://www.darkreading.com/cybersecurity-operations/why-ctf-more-important-than-ever]]></guid>
+                             
+                <media:thumbnail url="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/blt472af09911ab1135/6ae48844fd7d52aaa11129c2/ctf-gilaxia-getty-1781744928.jpg?width=720&amp;quality=80&amp;disable=upscale" />
+                <media:content url="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/blt472af09911ab1135/6ae48844fd7d52aaa11129c2/ctf-gilaxia-getty-1781744928.jpg?width=720&amp;quality=80&amp;disable=upscale" medium="image">
+                    <media:title type="html">ctf-gilaxia-getty-1781744928.jpg</media:title>
+                </media:content>
+                                    </item><item>
+            <title><![CDATA[Claude Model Builds Exploits Across Major Browsers &amp; OSes]]></title>
+            <link><![CDATA[https://www.darkreading.com/application-security/claude-model-exploits-major-browsers-oses]]></link>
+                        <description><![CDATA[An unreleased version of the AI model has found and chained multiple vulnerabilities in Chrome, Safari, Android, Windows, and Linux, Anthropic says.]]></description>
+                                                        <pubDate>Thu, 29 Oct 2026 18:15:59 GMT</pubDate>
+                                                                <dc:creator>Jai Vijayan</dc:creator>
+                                    <guid isPermaLink="false"><![CDATA[https://www.darkreading.com/application-security/claude-model-exploits-major-browsers-oses]]></guid>
+                             
+                <media:thumbnail url="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/blt626614753803fdf0/6ae260b6848b397b5d1859e3/anthropic_Algi_Febri_Sugita_shutterstock.jpg?width=720&amp;quality=80&amp;disable=upscale" />
+                <media:content url="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/blt626614753803fdf0/6ae260b6848b397b5d1859e3/anthropic_Algi_Febri_Sugita_shutterstock.jpg?width=720&amp;quality=80&amp;disable=upscale" medium="image">
+                    <media:title type="html">anthropic_Algi_Febri_Sugita_shutterstock.jpg</media:title>
+                </media:content>
+                                    </item><item>
+            <title><![CDATA[Threat Modeling With 4 Simple Questions on a White Board]]></title>
+            <link><![CDATA[https://www.darkreading.com/cyber-risk/threat-modeling-4-simple-questions]]></link>
+                        <description><![CDATA[A four-question exercise that CISOs can use to create a threat model that promises results, without a big spend.]]></description>
+                                                        <pubDate>Thu, 29 Oct 2026 15:44:04 GMT</pubDate>
+                                                                <dc:creator>Becky Bracken</dc:creator>
+                                    <guid isPermaLink="false"><![CDATA[https://www.darkreading.com/cyber-risk/threat-modeling-4-simple-questions]]></guid>
+                             
+                <media:thumbnail url="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/bltbcb778399a7f6bf5/6ae2559253ec23dfb497d680/White_Board_ljubaphoto_Getty.jpg?width=720&amp;quality=80&amp;disable=upscale" />
+                <media:content url="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/bltbcb778399a7f6bf5/6ae2559253ec23dfb497d680/White_Board_ljubaphoto_Getty.jpg?width=720&amp;quality=80&amp;disable=upscale" medium="image">
+                    <media:title type="html">White_Board_ljubaphoto_Getty.jpg</media:title>
+                </media:content>
+                                    </item><item>
+            <title><![CDATA[Shadowy AI Relay Disables OpenAI Codex, Claude Code Sandboxes]]></title>
+            <link><![CDATA[https://www.darkreading.com/threat-intelligence/ai-relay-service-openai-codex-claude-code-sandboxes]]></link>
+                        <description><![CDATA[The enigmatic service is providing popular AI coding tools to mainland China and other regions where OpenAI and Anthropic products are not officially for sale — but with key security features turned off.]]></description>
+                                                        <pubDate>Thu, 29 Oct 2026 10:00:00 GMT</pubDate>
+                                                                <dc:creator>Rob Wright</dc:creator>
+                                    <guid isPermaLink="false"><![CDATA[https://www.darkreading.com/threat-intelligence/ai-relay-service-openai-codex-claude-code-sandboxes]]></guid>
+                             
+                <media:thumbnail url="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/blt036489a36358dea1/6a971529de036c92b216129d/aicoding-AreeSarak-Getty-2252848921.jpg?width=720&amp;quality=80&amp;disable=upscale" />
+                <media:content url="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/blt036489a36358dea1/6a971529de036c92b216129d/aicoding-AreeSarak-Getty-2252848921.jpg?width=720&amp;quality=80&amp;disable=upscale" medium="image">
+                    <media:title type="html">aicoding-AreeSarak-Getty-2252848921.jpg</media:title>
+                </media:content>
+                                    </item><item>
+            <title><![CDATA[Cyber Vulnerabilities Besiege Italy, Absent Clear Cause]]></title>
+            <link><![CDATA[https://www.darkreading.com/cybersecurity-analytics/cyber-vulnerabilities-besiege-italy]]></link>
+                        <description><![CDATA[Researchers can't quite explain why cyber threats look so different in Italy compared with everywhere else.]]></description>
+                                                        <pubDate>Thu, 29 Oct 2026 08:00:00 GMT</pubDate>
+                                                                <dc:creator>Nate Nelson</dc:creator>
+                                    <guid isPermaLink="false"><![CDATA[https://www.darkreading.com/cybersecurity-analytics/cyber-vulnerabilities-besiege-italy]]></guid>
+                             
+                <media:thumbnail url="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/blt0dafcf0847efff9a/6ae24fff8ec8cff4371f87c5/rome-Sean_Gallup-GettyImages-623337092jpg.jpg?width=720&amp;quality=80&amp;disable=upscale" />
+                <media:content url="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/blt0dafcf0847efff9a/6ae24fff8ec8cff4371f87c5/rome-Sean_Gallup-GettyImages-623337092jpg.jpg?width=720&amp;quality=80&amp;disable=upscale" medium="image">
+                    <media:title type="html">rome-Sean_Gallup-GettyImages-623337092jpg.jpg</media:title>
+                </media:content>
+                                    </item><item>
+            <title><![CDATA[GhostAction Hacking Wave Fizzles, but Attackers Lurk on in GitHub]]></title>
+            <link><![CDATA[https://www.darkreading.com/application-security/ghostaction-hacking-wave-fizzles-attackers-github]]></link>
+                        <description><![CDATA[The supply chain attack campaign's shift toward developer endpoints and cloud access signals what could be next for the cybercrime outfit.]]></description>
+                                                        <pubDate>Wed, 28 Oct 2026 19:39:00 GMT</pubDate>
+                                                                <dc:creator>Alexander Culafi</dc:creator>
+                                    <guid isPermaLink="false"><![CDATA[https://www.darkreading.com/application-security/ghostaction-hacking-wave-fizzles-attackers-github]]></guid>
+                             
+                <media:thumbnail url="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/bltb1d9be3de2e89da6/6ae252ca6c2fe31e558a43e9/Ghosts-GrafikLab-GettyImages-2173220193.jpg?width=720&amp;quality=80&amp;disable=upscale" />
+                <media:content url="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/bltb1d9be3de2e89da6/6ae252ca6c2fe31e558a43e9/Ghosts-GrafikLab-GettyImages-2173220193.jpg?width=720&amp;quality=80&amp;disable=upscale" medium="image">
+                    <media:title type="html">Ghosts-GrafikLab-GettyImages-2173220193.jpg</media:title>
+                </media:content>
+                                    </item><item>
+            <title><![CDATA[AI Takes Root in Hospital Corridors, Raises Security Stakes]]></title>
+            <link><![CDATA[https://www.darkreading.com/cybersecurity-operations/ai-root-hospital-corridors-raised-security-stakes]]></link>
+                        <description><![CDATA[Artificial intelligence is everywhere in healthcare, from doctors' intake forms to cancer screenings. But in some cases, life-and-death uses are outpacing cybersecurity.]]></description>
+                                                        <pubDate>Wed, 28 Oct 2026 15:29:06 GMT</pubDate>
+                                                                <dc:creator>Arielle Waldman</dc:creator>
+                                    <guid isPermaLink="false"><![CDATA[https://www.darkreading.com/cybersecurity-operations/ai-root-hospital-corridors-raised-security-stakes]]></guid>
+                             
+                <media:thumbnail url="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/blt27f5645084863935/6ae21761f2adb985c612d4c7/GettyImages-1415423396.jpg?width=720&amp;quality=80&amp;disable=upscale" />
+                <media:content url="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/blt27f5645084863935/6ae21761f2adb985c612d4c7/GettyImages-1415423396.jpg?width=720&amp;quality=80&amp;disable=upscale" medium="image">
+                    <media:title type="html">GettyImages-1415423396.jpg</media:title>
+                </media:content>
+                                    </item><item>
+            <title><![CDATA[Attacker Relentlessly Scans for Credentials by Impersonating AI Bots]]></title>
+            <link><![CDATA[https://www.darkreading.com/cyber-risk/attacker-impersonates-ai-bots-scans-credentials]]></link>
+                        <description><![CDATA[The threat actor lurked behind bots posing as agents from OpenAI, Anthropic, Meta, and others to find exposed data.]]></description>
+                                                        <pubDate>Wed, 28 Oct 2026 14:37:52 GMT</pubDate>
+                                                                <dc:creator>Elizabeth Montalbano</dc:creator>
+                                    <guid isPermaLink="false"><![CDATA[https://www.darkreading.com/cyber-risk/attacker-impersonates-ai-bots-scans-credentials]]></guid>
+                             
+                <media:thumbnail url="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/bltf851053137fec653/6ae1e3cca1e4219344f6a136/credentials-NicoElNino-AdobeStock.png?width=720&amp;quality=80&amp;disable=upscale" />
+                <media:content url="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/bltf851053137fec653/6ae1e3cca1e4219344f6a136/credentials-NicoElNino-AdobeStock.png?width=720&amp;quality=80&amp;disable=upscale" medium="image">
+                    <media:title type="html">credentials-NicoElNino-AdobeStock.png</media:title>
+                </media:content>
+                                    </item><item>
+            <title><![CDATA[Third Serengeti Sweep Tops 1,400 Arrests as Investigations Mature]]></title>
+            <link><![CDATA[https://www.darkreading.com/cybersecurity-operations/third-serengeti-sweep-1400-arrests-investigations-mature]]></link>
+                        <description><![CDATA[Interpol's annual Operation Serengeti, now in its third iteration, led to 1,462 arrests across 20 African countries and the US, recovering $105 million in stolen funds.]]></description>
+                                                        <pubDate>Wed, 28 Oct 2026 06:00:00 GMT</pubDate>
+                                                                <dc:creator>Robert Lemos</dc:creator>
+                                    <guid isPermaLink="false"><![CDATA[https://www.darkreading.com/cybersecurity-operations/third-serengeti-sweep-1400-arrests-investigations-mature]]></guid>
+                             
+                <media:thumbnail url="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/blt88d7810c6bea6d70/6ae11337facab4e020903095/lion-chasing-zebras-Wirestock_Creators-shutterstock.jpg?width=720&amp;quality=80&amp;disable=upscale" />
+                <media:content url="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/blt88d7810c6bea6d70/6ae11337facab4e020903095/lion-chasing-zebras-Wirestock_Creators-shutterstock.jpg?width=720&amp;quality=80&amp;disable=upscale" medium="image">
+                    <media:title type="html">lion-chasing-zebras-Wirestock_Creators-shutterstock.jpg</media:title>
+                </media:content>
+                                    </item><item>
+            <title><![CDATA[3 Frameworks to Protect CISOs &amp; Orgs Against AI Liability]]></title>
+            <link><![CDATA[https://www.darkreading.com/cyber-risk/3-frameworks-cisos-ai-liability]]></link>
+                        <description><![CDATA[Cyber leaders can get ahead of AI liability with rigorous documentation, transparency, and smart contract negotiations with AI vendors.]]></description>
+                                                        <pubDate>Tue, 27 Oct 2026 21:15:03 GMT</pubDate>
+                                                                <dc:creator>Becky Bracken</dc:creator>
+                                    <guid isPermaLink="false"><![CDATA[https://www.darkreading.com/cyber-risk/3-frameworks-cisos-ai-liability]]></guid>
+                             
+                <media:thumbnail url="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/bltbc201b7327a3221e/6ae0e1681ae793f19fb9e1de/Cyber_legal_Abu_Hanifa_Getty_Images.jpg?width=720&amp;quality=80&amp;disable=upscale" />
+                <media:content url="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/bltbc201b7327a3221e/6ae0e1681ae793f19fb9e1de/Cyber_legal_Abu_Hanifa_Getty_Images.jpg?width=720&amp;quality=80&amp;disable=upscale" medium="image">
+                    <media:title type="html">Cyber_legal_Abu_Hanifa_Getty_Images.jpg</media:title>
+                </media:content>
+                                    </item><item>
+            <title><![CDATA[External Teams Chats Anchor 15-Minute Malware Delivery]]></title>
+            <link><![CDATA[https://www.darkreading.com/cloud-security/email-bombing-external-teams-chats-repeatable-access-path]]></link>
+                        <description><![CDATA[Mail bombing is getting a new look with a wide-scale, ongoing social engineering campaign that might be tied to the Black Basta ransomware gang.]]></description>
+                                                        <pubDate>Tue, 27 Oct 2026 20:42:40 GMT</pubDate>
+                                                                <dc:creator>Alexander Culafi</dc:creator>
+                                    <guid isPermaLink="false"><![CDATA[https://www.darkreading.com/cloud-security/email-bombing-external-teams-chats-repeatable-access-path]]></guid>
+                             
+                <media:thumbnail url="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/blt634b295db59f5c55/6ae0fd3853ec236cfd97d242/Email_flood-juststock-GettyImages-2156140935.jpg?width=720&amp;quality=80&amp;disable=upscale" />
+                <media:content url="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/blt634b295db59f5c55/6ae0fd3853ec236cfd97d242/Email_flood-juststock-GettyImages-2156140935.jpg?width=720&amp;quality=80&amp;disable=upscale" medium="image">
+                    <media:title type="html">Email_flood-juststock-GettyImages-2156140935.jpg</media:title>
+                </media:content>
+                                    </item></channel></rss>

@@ -31,7 +31,7 @@ describe('xml scanner', () => {
 
 describe('news feeds (real fixtures)', () => {
   const files: Record<string, string> = {
-    bleepingcomputer: 'bleepingcomputer.xml',
+    darkreading: 'darkreading.xml',
     therecord: 'therecord.xml',
     thehackernews: 'thehackernews.xml',
     securityweek: 'securityweek.xml',

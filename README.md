@@ -135,7 +135,7 @@ Useful admin calls (all need the bearer token):
 | Call | Does |
 |---|---|
 | `GET /admin/status` | source health, counters |
-| `POST /admin/run?source=ransomware.live` | run one source now (`bleepingcomputer`, `therecord`, `thehackernews`, `securityweek`, `cisa-kev`, `ransomware.live`). Prefer one at a time: `?source=all` also works but puts every source into one invocation, close to the free plan's 50-D1-queries limit |
+| `POST /admin/run?source=ransomware.live` | run one source now (`darkreading`, `therecord`, `thehackernews`, `securityweek`, `cisa-kev`, `ransomware.live`). Prefer one at a time: `?source=all` also works but puts every source into one invocation, close to the free plan's 50-D1-queries limit |
 | `POST /admin/test-alert` | send a sample alert |
 | `POST /admin/setup-webhook` | (re)register webhook + commands |
 
@@ -149,8 +149,7 @@ Useful admin calls (all need the bearer token):
 - **10 ms CPU**: RSS is scanned with `indexOf`, not a DOM parser, and only the newest 20 items.
   The 1.8 MB KEV file is *streamed*: only the first 48 KB is read (it's newest-first), the rest
   is cancelled. Waiting on the network doesn't count toward CPU.
-- **Conditional requests**: `If-None-Match` / `If-Modified-Since` everywhere. BleepingComputer,
-  SecurityWeek and CISA answer `304 Not Modified`, so most runs parse nothing. KEV additionally
+- **Conditional requests**: `If-None-Match` / `If-Modified-Since` everywhere. SecurityWeek and CISA answer `304 Not Modified`, so most runs parse nothing. KEV additionally
   compares `count` + `dateReleased`.
 - **Telegram limits**: alerts go through a D1 outbox, at most 5 per run, 1.1 s apart; the rest
   go out on the next tick. On HTTP 429 the worker honours `retry_after`.

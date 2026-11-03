@@ -4,7 +4,8 @@ import { parseDate, parseFeed, type RawFeedEntry } from '../xml';
 import type { Source } from './types';
 
 export const NEWS_FEEDS = [
-  { name: 'bleepingcomputer', label: 'BleepingComputer', url: 'https://www.bleepingcomputer.com/feed/' },
+  // BleepingComputer was dropped: it answers 403 to requests from Cloudflare Workers (2026-11-03).
+  { name: 'darkreading', label: 'Dark Reading', url: 'https://www.darkreading.com/rss.xml' },
   { name: 'therecord', label: 'The Record', url: 'https://therecord.media/feed' },
   { name: 'thehackernews', label: 'The Hacker News', url: 'https://feeds.feedburner.com/TheHackersNews' },
   { name: 'securityweek', label: 'SecurityWeek', url: 'https://www.securityweek.com/feed/' },

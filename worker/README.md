@@ -15,7 +15,7 @@ src/
   xml.ts              tiny RSS/Atom scanner (CPU-cheap)
   http.ts             conditional GET (ETag / If-Modified-Since), hashing
   sources/
-    news.ts           BleepingComputer, The Record, The Hacker News, SecurityWeek
+    news.ts           Dark Reading, The Record, The Hacker News, SecurityWeek
     kev.ts            CISA KEV (streamed head only)
     ransomwarelive.ts ransomware.live RSS (default) or PRO API (with key)
   telegram/
@@ -62,7 +62,7 @@ Inspect the local DB:
 
 | Source | URL | Caching | Notes |
 |---|---|---|---|
-| BleepingComputer | `bleepingcomputer.com/feed/` | 304 ✓ | sponsored posts filtered via `dc:creator` |
+| Dark Reading | `darkreading.com/rss.xml` | Last-Modified | replaced BleepingComputer, which returns 403 to Cloudflare Workers |
 | The Record | `therecord.media/feed` | none | always full fetch (small feed) |
 | The Hacker News | `feeds.feedburner.com/TheHackersNews` | Last-Modified only | |
 | SecurityWeek | `securityweek.com/feed/` | 304 ✓ | |

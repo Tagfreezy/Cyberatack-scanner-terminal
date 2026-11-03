@@ -66,6 +66,7 @@ function truncate(s: string, n: number): string {
 
 const SOURCE_LABEL: Record<string, string> = {
   bleepingcomputer: 'BleepingComputer',
+  darkreading: 'Dark Reading',
   therecord: 'The Record',
   thehackernews: 'The Hacker News',
   securityweek: 'SecurityWeek',

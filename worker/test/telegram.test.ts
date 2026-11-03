@@ -75,7 +75,7 @@ describe('scheduler', () => {
       for (const s of dueSources(Date.UTC(2026, 10, 3, 12, m))) counts[s.name] = (counts[s.name] ?? 0) + 1;
     }
     expect(counts).toEqual({
-      bleepingcomputer: 3,
+      darkreading: 3,
       therecord: 3,
       thehackernews: 3,
       securityweek: 3,
