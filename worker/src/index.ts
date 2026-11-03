@@ -9,6 +9,7 @@ import { formatAlert } from './telegram/format';
 import { BOT_COMMANDS } from './telegram/commands';
 import { handleUpdate, type TgUpdate } from './telegram/webhook';
 import { classify, embed } from './ai';
+import { handleApi } from './api';
 import { cosine } from './dedupe';
 import type { Env, Item } from './types';
 
@@ -48,6 +49,11 @@ export default {
     // --- Everything below needs the bearer token ----------------------------------------
     if (path.startsWith('/admin/') || path.startsWith('/api/')) {
       if (!bearerOk(req, env)) return json({ error: 'unauthorized' }, 401);
+    }
+
+    if (path.startsWith('/api/')) {
+      const res = await handleApi(req, env, url);
+      if (res) return res;
     }
 
     // Send a sample alert straight to Telegram (phase-1 smoke test).

@@ -16,7 +16,7 @@ and (from phase 2) AI-classifies them, sends alerts to your Telegram bot, and
 | Folder | What |
 |---|---|
 | [`worker/`](worker/README.md) | Cloudflare Worker (TypeScript): sources, scoring, D1, Telegram |
-| [`terminal/`](terminal/README.md) | Python + Textual dashboard (phase 4) |
+| [`terminal/`](terminal/README.md) | Python + Textual dashboard: live feed, world map, stats |
 
 ## Status
 
@@ -25,7 +25,7 @@ and (from phase 2) AI-classifies them, sends alerts to your Telegram bot, and
 | 1 | Worker skeleton, D1 schema, RSS + CISA KEV + ransomware.live, keyword scoring, basic alerts | ✅ deployed |
 | 2 | Workers AI classification, dedupe into incidents, message editing, fallback | ✅ deployed |
 | 3 | Telegram commands, buttons, mutes, daily digest, weekly report | ✅ deployed |
-| 4 | JSON API + Textual terminal dashboard | ⏳ |
+| 4 | JSON API + Textual terminal dashboard | ✅ done |
 | 5 | SANS ISC sensor data, spike alerts, optional sources | ⏳ |
 
 ---
@@ -120,7 +120,18 @@ curl.exe -X POST -H "Authorization: Bearer <API_TOKEN>" https://cyberwatch.<sub>
 
 Your phone should buzz with a 🟠 HIGH test alert. Then send `/status` to the bot.
 
-### 9. Watch it run
+### 9. Terminal dashboard
+
+Needs Python 3.11+ (`python --version`). Copy `terminal/.env.example` to `terminal/.env` and put in
+your Worker URL and the `API_TOKEN` from step 6. Then:
+
+- **Windows:** double-click `terminal/run.bat` (or run it in Windows Terminal)
+- **macOS/Linux:** `cd terminal && ./run.sh`
+
+The first start installs everything into `terminal/.venv`. Keys: `Enter` details, `f` filter,
+`o` open link, `q` quit. See [terminal/README.md](terminal/README.md).
+
+### 10. Watch it run
 
 ```bash
 npm run tail          # live logs: one JSON line per source run, with ok/error

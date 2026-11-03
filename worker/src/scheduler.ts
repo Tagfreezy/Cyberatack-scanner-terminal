@@ -1,3 +1,4 @@
+import { refreshStatsSnapshot } from './api';
 import { log, logError } from './log';
 import { drainOutbox } from './outbox';
 import { runSource } from './pipeline';
@@ -19,7 +20,7 @@ export const ALL_SOURCES: Source[] = [...newsSources, ransomwareLiveSource, kevS
  *   - CISA KEV once an hour (304 / unchanged-check makes most runs free)
  * Budget per tick (free plan: 50 subrequests shared by D1, fetch, AI, Vectorize; a
  * db.batch counts as one): ≤2 sources × 4 + AI processing ≈ 21 + backfill 4 (2×/h)
- * + outbox ≤ 9 + cleanup ≈ 4 (once a day) → worst case ≈ 46.
+ * + outbox ≤ 9 + stats snapshot 1–2 + cleanup ≈ 4 (once a day) → worst case ≈ 40.
  * Slots are computed from the trigger's scheduledTime (not Date.now()), so a delayed run
  * still does the job it was meant for.
  */
@@ -48,6 +49,8 @@ export async function runScheduled(env: Env, scheduledTime: number): Promise<voi
   // Digest (daily) / weekly report: only does anything during the 08:xx Zurich hour.
   await step('reports', () => maybeSendReports(env, scheduledTime));
   await step('outbox', () => drainOutbox(env));
+  // Dashboard stats snapshot: recomputed only if incidents changed (see api.ts).
+  await step('stats', () => refreshStatsSnapshot(env));
   if (isCleanupSlot(scheduledTime)) await step('cleanup', () => cleanup(env));
 }
 

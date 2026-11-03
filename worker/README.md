@@ -21,6 +21,7 @@ src/
     news.ts           Dark Reading, The Record, The Hacker News, SecurityWeek
     kev.ts            CISA KEV (streamed head only)
     ransomwarelive.ts ransomware.live RSS (default) or PRO API (with key)
+  api.ts              /api/feed (incremental), /api/stats (cron snapshot), /api/sensors, explain
   reports.ts          daily digest + weekly report (SQL aggregation), 08:00-local trigger
   mutes.ts            quiet time + group/vendor/victim mutes (pure matching, tested)
   time.ts             Europe/Zurich local time via Intl (DST-safe), durations, ISO weeks
@@ -143,3 +144,15 @@ peak a little but can't get every run under the nominal 10 ms (none were rejecte
 | `POST /admin/process` | run stage 2 now (`?backfill` also embeds old incidents, `?n=K` items, `?nosend` skips Telegram) |
 | `GET /admin/preview?what=digest\|weekly` | render the digest / weekly report without sending |
 | `POST /admin/ai-eval` | `{model?, items?: [{title, summary, typeHint, meta}], embed?: [texts], embedModel?}` → classifications + similarity matrix |
+
+## Dashboard API (bearer token)
+
+| Endpoint | Returns |
+|---|---|
+| `GET /api/feed?since=<cursor>&limit=150` | incidents created or updated after `cursor` (newest first) + new `cursor` |
+| `GET /api/stats` | today / 7 d / previous 7 d counts, by type, severity, sector, country (all), top groups, 24 h hourly, live source health |
+| `GET /api/sensors` | SANS ISC data (phase 5; `{available:false}` until then) |
+| `POST /api/incident/<id>/explain` | AI explanation (cached, same as the Telegram button) |
+
+Stats are precomputed by the cron into one `settings` row, only when incidents changed (one indexed
+`MAX(last_seen)` check per tick). A dashboard poll therefore reads ~10 D1 rows instead of thousands.
