@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>SecurityWeek</title>
+	<atom:link href="https://www.securityweek.com/feed/" rel="self" type="application/rss+xml" />
+	<link>https://www.securityweek.com/</link>
+	<description>Cybersecurity News, Insights &#38; Analysis</description>
+	<lastBuildDate>Tue, 03 Nov 2026 14:36:48 +0000</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>
+	hourly	</sy:updatePeriod>
+	<sy:updateFrequency>
+	1	</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=7.1.4</generator>
+
+<image>
+	<url>https://www.securityweek.com/wp-content/uploads/2023/01/cropped-SecurityWeek-Icon-32x32.jpeg</url>
+	<title>SecurityWeek</title>
+	<link>https://www.securityweek.com/</link>
+	<width>32</width>
+	<height>32</height>
+</image> 
+	<item>
+		<title>Frontline Education Data Breach Impacts Over 1.3 Million</title>
+		<link>https://www.securityweek.com/frontline-education-data-breach-impacts-over-1-3-million/</link>
+		
+		<dc:creator><![CDATA[Ionut Arghire]]></dc:creator>
+		<pubDate>Tue, 03 Nov 2026 14:32:38 +0000</pubDate>
+				<category><![CDATA[Data Breaches]]></category>
+		<category><![CDATA[data breach]]></category>
+		<category><![CDATA[education]]></category>
+		<category><![CDATA[Frontline Education]]></category>
+		<guid isPermaLink="false">https://www.securityweek.com/?p=50501</guid>
+
+					<description><![CDATA[<p>Hackers exploited a flaw in third-party software and stole the personal information of school district staff and students.</p>
+<p>The post <a href="https://www.securityweek.com/frontline-education-data-breach-impacts-over-1-3-million/">Frontline Education Data Breach Impacts Over 1.3 Million</a> appeared first on <a href="https://www.securityweek.com">SecurityWeek</a>.</p>
+]]></description>
+		
+		
+		
+			</item>
+		<item>
+		<title>CrowdStrike Reportedly Paying $495 Million for AI Security Firms Fiddler, Dreadnode</title>
+		<link>https://www.securityweek.com/crowdstrike-reportedly-paying-495-million-for-ai-security-firms-fiddler-dreadnode/</link>
+		
+		<dc:creator><![CDATA[Eduard Kovacs]]></dc:creator>
+		<pubDate>Tue, 03 Nov 2026 14:12:44 +0000</pubDate>
+				<category><![CDATA[Funding/M&A]]></category>
+		<category><![CDATA[M&A Tracker]]></category>
+		<category><![CDATA[Acquisition]]></category>
+		<category><![CDATA[CrowdStrike]]></category>
+		<category><![CDATA[Dreadnode]]></category>
+		<category><![CDATA[Fiddler]]></category>
+		<category><![CDATA[M&A]]></category>
+		<guid isPermaLink="false">https://www.securityweek.com/?p=50496</guid>
+
+					<description><![CDATA[<p>The acquisitions will add AI agent observability and automated AI security testing capabilities to the CrowdStrike Falcon platform.</p>
+<p>The post <a href="https://www.securityweek.com/crowdstrike-reportedly-paying-495-million-for-ai-security-firms-fiddler-dreadnode/">CrowdStrike Reportedly Paying $495 Million for AI Security Firms Fiddler, Dreadnode</a> appeared first on <a href="https://www.securityweek.com">SecurityWeek</a>.</p>
+]]></description>
+		
+		
+		
+			</item>
+		<item>
+		<title>Android&#8217;s November 2026 Updates Patch Over 200 Vulnerabilities</title>
+		<link>https://www.securityweek.com/androids-november-2026-updates-patch-over-200-vulnerabilities/</link>
+		
+		<dc:creator><![CDATA[Ionut Arghire]]></dc:creator>
+		<pubDate>Tue, 03 Nov 2026 12:21:49 +0000</pubDate>
+				<category><![CDATA[Mobile & Wireless]]></category>
+		<category><![CDATA[Vulnerabilities]]></category>
+		<category><![CDATA[Android]]></category>
+		<category><![CDATA[mobile security]]></category>
+		<category><![CDATA[patches]]></category>
+		<category><![CDATA[vulnerability]]></category>
+		<guid isPermaLink="false">https://www.securityweek.com/?p=50494</guid>
+
+					<description><![CDATA[<p>The most severe is a critical flaw in Framework leading to remote code execution without user interaction.</p>
+<p>The post <a href="https://www.securityweek.com/androids-november-2026-updates-patch-over-200-vulnerabilities/">Android&#8217;s November 2026 Updates Patch Over 200 Vulnerabilities</a> appeared first on <a href="https://www.securityweek.com">SecurityWeek</a>.</p>
+]]></description>
+		
+		
+		
+			</item>
+		<item>
+		<title>Critical Node-RED Flaw Exploited in Attacks</title>
+		<link>https://www.securityweek.com/critical-node-red-flaw-exploited-in-attacks/</link>
+		
+		<dc:creator><![CDATA[Ionut Arghire]]></dc:creator>
+		<pubDate>Tue, 03 Nov 2026 12:10:19 +0000</pubDate>
+				<category><![CDATA[ICS/OT]]></category>
+		<category><![CDATA[Vulnerabilities]]></category>
+		<category><![CDATA[exploited]]></category>
+		<category><![CDATA[ICS]]></category>
+		<category><![CDATA[Node-RED]]></category>
+		<category><![CDATA[Siemens]]></category>
+		<category><![CDATA[vulnerability]]></category>
+		<guid isPermaLink="false">https://www.securityweek.com/?p=50492</guid>
+
+					<description><![CDATA[<p>Multiple attacks from the same IP address attempted to deploy various payloads, including a Linux bot and webshells.</p>
+<p>The post <a href="https://www.securityweek.com/critical-node-red-flaw-exploited-in-attacks/">Critical Node-RED Flaw Exploited in Attacks</a> appeared first on <a href="https://www.securityweek.com">SecurityWeek</a>.</p>
+]]></description>
+		
+		
+		
+			</item>
+		<item>
+		<title>UK Cyber Chief Says the UK Will Face AI Cyberattacks on Critical Infrastructure by 2028</title>
+		<link>https://www.securityweek.com/uk-cyber-chief-says-the-uk-will-face-ai-cyberattacks-on-critical-infrastructure-by-2028/</link>
+		
+		<dc:creator><![CDATA[Associated Press]]></dc:creator>
+		<pubDate>Tue, 03 Nov 2026 09:49:12 +0000</pubDate>
+				<category><![CDATA[Artificial Intelligence]]></category>
+		<category><![CDATA[Government]]></category>
+		<category><![CDATA[AI]]></category>
+		<category><![CDATA[NCSC]]></category>
+		<category><![CDATA[Report]]></category>
+		<category><![CDATA[UK]]></category>
+		<category><![CDATA[UK government]]></category>
+		<guid isPermaLink="false">https://www.securityweek.com/?p=50490</guid>
+
+					<description><![CDATA[<p>The U.K. will likely face AI cyberattacks on its critical infrastructure by 2028 as criminals and states, including China and Russia, increasingly use AI in their cyber activity.</p>
+<p>The post <a href="https://www.securityweek.com/uk-cyber-chief-says-the-uk-will-face-ai-cyberattacks-on-critical-infrastructure-by-2028/">UK Cyber Chief Says the UK Will Face AI Cyberattacks on Critical Infrastructure by 2028</a> appeared first on <a href="https://www.securityweek.com">SecurityWeek</a>.</p>
+]]></description>
+		
+		
+		
+			</item>
+		<item>
+		<title>Google Dismantles XCPE Botnet of 1.3 Million Android Devices</title>
+		<link>https://www.securityweek.com/google-dismantles-xcpe-botnet-of-1-3-million-android-devices/</link>
+		
+		<dc:creator><![CDATA[Ionut Arghire]]></dc:creator>
+		<pubDate>Tue, 03 Nov 2026 09:22:09 +0000</pubDate>
+				<category><![CDATA[Malware & Threats]]></category>
+		<category><![CDATA[botnet]]></category>
+		<category><![CDATA[disrupted]]></category>
+		<category><![CDATA[Featured]]></category>
+		<category><![CDATA[google]]></category>
+		<category><![CDATA[takedown]]></category>
+		<category><![CDATA[XCPE]]></category>
+		<guid isPermaLink="false">https://www.securityweek.com/?p=50488</guid>
+
+					<description><![CDATA[<p>The botnet was created and operated for financial gain by Android OEM/ODM Videostrong Technology.</p>
+<p>The post <a href="https://www.securityweek.com/google-dismantles-xcpe-botnet-of-1-3-million-android-devices/">Google Dismantles XCPE Botnet of 1.3 Million Android Devices</a> appeared first on <a href="https://www.securityweek.com">SecurityWeek</a>.</p>
+]]></description>
+		
+		
+		
+			</item>
+		<item>
+		<title>NATO&#8217;s Crossed Swords Exercise Brings AI Agents Into Cyber Operations Training</title>
+		<link>https://www.securityweek.com/natos-crossed-swords-exercise-brings-ai-agents-into-cyber-operations-training/</link>
+		
+		<dc:creator><![CDATA[Eduard Kovacs]]></dc:creator>
+		<pubDate>Tue, 03 Nov 2026 08:49:03 +0000</pubDate>
+				<category><![CDATA[Government]]></category>
+		<category><![CDATA[Training & Awareness]]></category>
+		<category><![CDATA[CCDCOE]]></category>
+		<category><![CDATA[Crossed Swords]]></category>
+		<category><![CDATA[NATO]]></category>
+		<category><![CDATA[Training]]></category>
+		<guid isPermaLink="false">https://www.securityweek.com/?p=50485</guid>
+
+					<description><![CDATA[<p>The NATO CCDCOE exercise in Estonia introduces AI agents and OpenAI Daybreak into joint cyber and kinetic operations training.</p>
+<p>The post <a href="https://www.securityweek.com/natos-crossed-swords-exercise-brings-ai-agents-into-cyber-operations-training/">NATO&#8217;s Crossed Swords Exercise Brings AI Agents Into Cyber Operations Training</a> appeared first on <a href="https://www.securityweek.com">SecurityWeek</a>.</p>
+]]></description>
+		
+		
+		
+			</item>
+		<item>
+		<title>Over 100 European Stores Hit as Supermarket Fridge Attacks Return</title>
+		<link>https://www.securityweek.com/over-100-european-stores-hit-as-supermarket-fridge-attacks-resume/</link>
+		
+		<dc:creator><![CDATA[Eduard Kovacs]]></dc:creator>
+		<pubDate>Tue, 03 Nov 2026 07:43:24 +0000</pubDate>
+				<category><![CDATA[ICS/OT]]></category>
+		<category><![CDATA[controller]]></category>
+		<category><![CDATA[cyberattack]]></category>
+		<category><![CDATA[Danfoss]]></category>
+		<category><![CDATA[Europe]]></category>
+		<category><![CDATA[Featured]]></category>
+		<category><![CDATA[ICS]]></category>
+		<category><![CDATA[refrigeration]]></category>
+		<category><![CDATA[supermarket]]></category>
+		<guid isPermaLink="false">https://www.securityweek.com/?p=50480</guid>
+
+					<description><![CDATA[<p>Attackers again tampered with internet-exposed refrigeration controllers, this time at stores in Belgium, Sweden, Ireland and beyond.</p>
+<p>The post <a href="https://www.securityweek.com/over-100-european-stores-hit-as-supermarket-fridge-attacks-resume/">Over 100 European Stores Hit as Supermarket Fridge Attacks Return</a> appeared first on <a href="https://www.securityweek.com">SecurityWeek</a>.</p>
+]]></description>
+		
+		
+		
+			</item>
+		<item>
+		<title>Cybersecurity M&#038;A Roundup: 37 Deals Announced in October 2026</title>
+		<link>https://www.securityweek.com/cybersecurity-ma-roundup-37-deals-announced-in-october-2026/</link>
+		
+		<dc:creator><![CDATA[Eduard Kovacs]]></dc:creator>
+		<pubDate>Mon, 02 Nov 2026 15:01:11 +0000</pubDate>
+				<category><![CDATA[Funding/M&A]]></category>
+		<category><![CDATA[M&A Tracker]]></category>
+		<category><![CDATA[Acquisitions]]></category>
+		<category><![CDATA[Featured]]></category>
+		<category><![CDATA[M&A]]></category>
+		<guid isPermaLink="false">https://www.securityweek.com/?p=50474</guid>
+
+					<description><![CDATA[<p>Significant cybersecurity deals were announced by Absolute Security, Aikido, Anthropic, Cohere, Hex-Rays, and Proofpoint.</p>
+<p>The post <a href="https://www.securityweek.com/cybersecurity-ma-roundup-37-deals-announced-in-october-2026/">Cybersecurity M&#038;A Roundup: 37 Deals Announced in October 2026</a> appeared first on <a href="https://www.securityweek.com">SecurityWeek</a>.</p>
+]]></description>
+		
+		
+		
+			</item>
+		<item>
+		<title>Florida Student Aid Website Hack Puts Data of 4.9 Million People at Risk</title>
+		<link>https://www.securityweek.com/florida-student-aid-website-hack-puts-data-of-4-9-million-people-at-risk/</link>
+		
+		<dc:creator><![CDATA[Eduard Kovacs]]></dc:creator>
+		<pubDate>Mon, 02 Nov 2026 14:44:18 +0000</pubDate>
+				<category><![CDATA[Data Breaches]]></category>
+		<category><![CDATA[Government]]></category>
+		<category><![CDATA[data breach]]></category>
+		<category><![CDATA[education]]></category>
+		<category><![CDATA[Florida]]></category>
+		<guid isPermaLink="false">https://www.securityweek.com/?p=50472</guid>
+
+					<description><![CDATA[<p>The Florida Department of Education says SSNs and other personal data may have been exposed in a breach of its financial aid website.</p>
+<p>The post <a href="https://www.securityweek.com/florida-student-aid-website-hack-puts-data-of-4-9-million-people-at-risk/">Florida Student Aid Website Hack Puts Data of 4.9 Million People at Risk</a> appeared first on <a href="https://www.securityweek.com">SecurityWeek</a>.</p>
+]]></description>
+		
+		
+		
+			</item>
+	</channel>
+</rss>

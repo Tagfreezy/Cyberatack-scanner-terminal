@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+    <channel>
+        <title>The Record from Recorded Future News</title>
+        <link>https://therecord.media/feed</link>
+        <description>The Record by Recorded Future News gives exclusive, behind-the-scenes access to leaders, policymakers, researchers, and the shadows of the cyber underground.</description>
+        <lastBuildDate>Tue, 03 Nov 2026 17:43:00 GMT</lastBuildDate>
+        <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
+        <generator>The Record from Recorded Future News</generator>
+        <language>en</language>
+        <copyright>Copyright © 2026 | The Record from Recorded Future News</copyright>
+        <item>
+            <title><![CDATA[British businesses caught in Europe-wide supermarket fridge attacks]]></title>
+            <link>https://therecord.media/british-businesses-caught-in-europe-wide-supermarket-fridge-attacks</link>
+            <guid>https://therecord.media/british-businesses-caught-in-europe-wide-supermarket-fridge-attacks</guid>
+            <pubDate>Tue, 03 Nov 2026 17:43:00 GMT</pubDate>
+            <description><![CDATA[Supermarket and grocery store refrigerator controls across Europe were hacked in the early hours of Monday in the second such wave of attacks in recent weeks — following a first wave in France — with unidentified perpetrators defrosting fridges and causing stock to spoil.]]></description>
+            <category>Cybercrime</category>
+            <category>News</category>
+            <category>Government</category>
+            <category>Industry</category>
+            <enclosure url="http://cms.therecord.media/uploads/meat_40e30a68b3.jpg" length="0" type="image/jpg"/>
+        </item>
+        <item>
+            <title><![CDATA[Binance CEO says ‘months-long campaign’ led to $6.3 billion theft as N. Korea denies responsibility]]></title>
+            <link>https://therecord.media/binance-cryptocurrency-theft-months-long-campaign-nkorea</link>
+            <guid>https://therecord.media/binance-cryptocurrency-theft-months-long-campaign-nkorea</guid>
+            <pubDate>Tue, 03 Nov 2026 16:42:00 GMT</pubDate>
+            <description><![CDATA[North Korean attackers "combined a range of techniques, including social engineering by fake recruitment interviews," Binance said about the multibillion-dollar crypto heist it discovered in October.]]></description>
+            <category>Cybercrime</category>
+            <category>Nation-state</category>
+            <category>Malware</category>
+            <category>News</category>
+            <enclosure url="http://cms.therecord.media/uploads/binance_logo_f4cdb044bb.jpg" length="0" type="image/jpg"/>
+        </item>
+        <item>
+            <title><![CDATA[Russia dismantles infrastructure of VasyGrek cybercrime group, detains three suspects]]></title>
+            <link>https://therecord.media/russia-dismantles-vasygrek-infrastructure-detains-three</link>
+            <guid>https://therecord.media/russia-dismantles-vasygrek-infrastructure-detains-three</guid>
+            <pubDate>Tue, 03 Nov 2026 13:50:00 GMT</pubDate>
+            <description><![CDATA[Russia's Interior Ministry said Monday that police had dismantled the group's infrastructure and identified its suspected members following an investigation conducted with assistance from cybersecurity firm Kaspersky.]]></description>
+            <category>Cybercrime</category>
+            <category>Government</category>
+            <category>News</category>
+            <enclosure url="http://cms.therecord.media/uploads/russian_arrests_f80b0410db.jpg" length="0" type="image/jpg"/>
+        </item>
+        <item>
+            <title><![CDATA[Russia-linked cyber spies target Ukraine's war crimes investigations, military aid routes]]></title>
+            <link>https://therecord.media/russia-linked-cyber-spies-target-ukraine-war-support</link>
+            <guid>https://therecord.media/russia-linked-cyber-spies-target-ukraine-war-support</guid>
+            <pubDate>Tue, 03 Nov 2026 13:39:00 GMT</pubDate>
+            <description><![CDATA[The hackers use relatively simple malware to steal sensitive documents, login credentials and other information from Ukrainian organizations, particularly those near the front line and the Russian border.]]></description>
+            <category>Cybercrime</category>
+            <category>News</category>
+            <enclosure url="http://cms.therecord.media/uploads/ukraine_tank_a2d86eaf96.jpg" length="0" type="image/jpg"/>
+        </item>
+        <item>
+            <title><![CDATA[UK faces ‘unprecedented rise’ in cyberattacks in coming months, warns cyber chief]]></title>
+            <link>https://therecord.media/uk-ncsc-predicts-rise-cyberattacks-coming-months</link>
+            <guid>https://therecord.media/uk-ncsc-predicts-rise-cyberattacks-coming-months</guid>
+            <pubDate>Tue, 03 Nov 2026 00:01:00 GMT</pubDate>
+            <description><![CDATA["[V]ulnerabilities that have been tolerated for far too long can now be discovered and exploited at a scale that was once unimaginable," the NCSC's chief will warn in releasing the agency's annual report.]]></description>
+            <category>Nation-state</category>
+            <category>News</category>
+            <category>Industry</category>
+            <category>Government</category>
+            <enclosure url="http://cms.therecord.media/uploads/london_pexels_jesujoba_isaac_adedeji_917783_15431749_f35414183e.jpg" length="0" type="image/jpg"/>
+        </item>
+    </channel>
+</rss><!-- generated at 2026-11-03T18:31:52.923Z -->

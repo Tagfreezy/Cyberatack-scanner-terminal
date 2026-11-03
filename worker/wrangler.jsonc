@@ -1,0 +1,32 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "cyberwatch",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-01",
+  "compatibility_flags": ["nodejs_compat"],
+
+  // ONE cron trigger only. The free plan allows 5 cron triggers per *account*, so we
+  // keep the rest free and decide which jobs run inside the handler (src/scheduler.ts).
+  "triggers": { "crons": ["*/5 * * * *"] },
+
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "cyberwatch",
+      // Filled in after `npx wrangler d1 create cyberwatch` (see README).
+      "database_id": "REPLACE_WITH_D1_DATABASE_ID",
+      "migrations_dir": "migrations"
+    }
+  ],
+
+  // Non-secret settings. Secrets go in `.dev.vars` (local) / `wrangler secret put` (prod).
+  "vars": {
+    "ALERT_THRESHOLD": "4",
+    "TIMEZONE": "Europe/Zurich",
+    "USER_AGENT": "cyberwatch/1.0",
+    "MAX_TELEGRAM_SENDS_PER_RUN": "5",
+    "RSS_MAX_ITEMS": "20"
+  },
+
+  "observability": { "enabled": true }
+}

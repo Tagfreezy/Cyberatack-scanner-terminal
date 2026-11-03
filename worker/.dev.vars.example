@@ -1,0 +1,15 @@
+# Copy to `.dev.vars` for `wrangler dev`. Never commit `.dev.vars`.
+# In production set each one with:  npx wrangler secret put <NAME>
+
+# From @BotFather
+TELEGRAM_BOT_TOKEN=123456789:replace-me
+# Your personal chat ID (the bot only ever talks to this chat)
+TELEGRAM_CHAT_ID=123456789
+# Random string; Telegram echoes it in the X-Telegram-Bot-Api-Secret-Token header
+TELEGRAM_WEBHOOK_SECRET=replace-with-random-string
+# Bearer token for /api/* and /admin/* (terminal dashboard uses this too)
+API_TOKEN=replace-with-long-random-string
+
+# Optional: ransomware.live PRO key (free at https://my.ransomware.live). Without it the
+# public RSS feed is used.
+RANSOMWARE_LIVE_API_KEY=

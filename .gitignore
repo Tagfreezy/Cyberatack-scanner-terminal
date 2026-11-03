@@ -1,0 +1,21 @@
+# secrets
+.dev.vars
+.env
+*.local
+
+# node / wrangler
+node_modules/
+.wrangler/
+dist/
+
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# os / editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
