@@ -14,7 +14,7 @@
       "binding": "DB",
       "database_name": "cyberwatch",
       // Filled in after `npx wrangler d1 create cyberwatch` (see README).
-      "database_id": "REPLACE_WITH_D1_DATABASE_ID",
+      "database_id": "ba5617a1-09be-4b06-9c27-4e6b9b5c0577",
       "migrations_dir": "migrations"
     }
   ],

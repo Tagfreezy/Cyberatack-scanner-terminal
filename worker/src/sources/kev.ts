@@ -5,10 +5,10 @@ import type { Source } from './types';
 export const KEV_URL = 'https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json';
 
 // The KEV catalog is ~1.8 MB, but it is sorted newest-first. Instead of JSON.parse on
-// everything (too much CPU for the free plan), we stream only the first ~96 KB, cancel
+// everything (too much CPU for the free plan), we stream only the first ~48 KB, cancel
 // the rest, and pull complete objects out of that prefix.
-const HEAD_BYTES = 96 * 1024;
-const MAX_ENTRIES = 30;
+const HEAD_BYTES = 48 * 1024;
+const MAX_ENTRIES = 20;
 
 export interface KevVuln {
   cveID: string;

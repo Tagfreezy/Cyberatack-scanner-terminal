@@ -147,7 +147,7 @@ Useful admin calls (all need the bearer token):
   internally what each tick runs: one news feed per tick (each feed every 20 min),
   ransomware.live every 15 min, CISA KEV hourly.
 - **10 ms CPU**: RSS is scanned with `indexOf`, not a DOM parser, and only the newest 20 items.
-  The 1.8 MB KEV file is *streamed*: only the first 96 KB is read (it's newest-first), the rest
+  The 1.8 MB KEV file is *streamed*: only the first 48 KB is read (it's newest-first), the rest
   is cancelled. Waiting on the network doesn't count toward CPU.
 - **Conditional requests**: `If-None-Match` / `If-Modified-Since` everywhere. BleepingComputer,
   SecurityWeek and CISA answer `304 Not Modified`, so most runs parse nothing. KEV additionally
@@ -156,3 +156,8 @@ Useful admin calls (all need the bearer token):
   go out on the next tick. On HTTP 429 the worker honours `retry_after`.
 - **Isolation**: every source runs inside its own try/catch and records success or failure in
   `source_state`, so one broken feed never stops the others.
+
+> **Note for this PC:** an older `CF_API_TOKEN` environment variable (from another project)
+> overrides wrangler's login. For CyberWatch commands, prefix them so wrangler ignores it, e.g. in
+> Git Bash: `env -u CF_API_TOKEN npx wrangler deploy`, or in PowerShell:
+> `$env:CF_API_TOKEN=$null; npx wrangler deploy` (only affects that terminal window).
