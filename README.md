@@ -22,8 +22,8 @@ and (from phase 2) AI-classifies them, sends alerts to your Telegram bot, and
 
 | Phase | Content | State |
 |---|---|---|
-| 1 | Worker skeleton, D1 schema, RSS + CISA KEV + ransomware.live, keyword scoring, basic alerts | ✅ built + tested locally |
-| 2 | Workers AI classification, dedupe into incidents, message editing, fallback | ⏳ |
+| 1 | Worker skeleton, D1 schema, RSS + CISA KEV + ransomware.live, keyword scoring, basic alerts | ✅ deployed |
+| 2 | Workers AI classification, dedupe into incidents, message editing, fallback | ✅ deployed |
 | 3 | Telegram commands, buttons, mutes, daily digest, weekly report | ⏳ |
 | 4 | JSON API + Textual terminal dashboard | ⏳ |
 | 5 | SANS ISC sensor data, spike alerts, optional sources | ⏳ |
@@ -160,3 +160,11 @@ Useful admin calls (all need the bearer token):
 > overrides wrangler's login. For CyberWatch commands, prefix them so wrangler ignores it, e.g. in
 > Git Bash: `env -u CF_API_TOKEN npx wrangler deploy`, or in PowerShell:
 > `$env:CF_API_TOKEN=$null; npx wrangler deploy` (only affects that terminal window).
+
+### CPU time on the free plan (measured)
+
+The nominal free limit is 10 ms CPU per invocation. Measured in production: simple requests 0–4 ms,
+a feed run 5–11 ms, a run with AI classification/dedupe up to ~35 ms (the AI and network waits don't
+count; JSON/vector handling does). Every invocation so far completed with outcome `ok`. If Cloudflare
+ever starts rejecting runs, `npm run tail` shows `exceededCpu`; options are fewer items per tick
+(`AI_ITEMS_PER_RUN`) or the $5/month Workers Paid plan (30 s CPU).

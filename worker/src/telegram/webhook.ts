@@ -20,6 +20,9 @@ const HELP = [
   '/status — source health and counters',
   '/help — this message',
   '',
+  'Alerts are AI-classified; the same attack from several outlets becomes one alert that',
+  'gets updated ("📰 3 sources") instead of new messages.',
+  '',
   'More commands (/latest, /today, /mute, …) arrive in phase 3.',
 ].join('\n');
 
@@ -58,10 +61,13 @@ async function statusText(env: Env): Promise<string> {
   ).all<{ source: string; last_ok: number | null; last_error: string | null; last_error_at: number | null }>();
   const c = await env.DB.prepare(
     `SELECT (SELECT COUNT(*) FROM incidents WHERE first_seen > ?1) AS today,
-            (SELECT COUNT(*) FROM outbox WHERE sent_at IS NULL) AS pending`,
+            (SELECT COUNT(*) FROM outbox WHERE sent_at IS NULL AND attempts < 5) AS pending,
+            (SELECT COUNT(*) FROM items WHERE status = 'pending') AS queue,
+            (SELECT COUNT(*) FROM incidents WHERE first_seen > ?1 AND source_count > 1) AS merged,
+            (SELECT value FROM settings WHERE key = 'ai_paused_until') AS ai_paused_until`,
   )
     .bind(Date.now() - 86_400_000)
-    .first<{ today: number; pending: number }>();
+    .first<{ today: number; pending: number; queue: number; merged: number; ai_paused_until: string | null }>();
 
   const lines = ['<b>Sources</b>'];
   for (const r of results) {
@@ -70,6 +76,14 @@ async function statusText(env: Env): Promise<string> {
     lines.push(`${healthy ? '🟢' : '🔴'} ${escapeHtml(sourceLabel(r.source))} — ${detail}`);
   }
   if (!results.length) lines.push('(no runs yet)');
-  lines.push('', `Incidents (24h): ${c?.today ?? 0} · queued messages: ${c?.pending ?? 0}`);
+  const pausedUntil = Number(c?.ai_paused_until ?? 0);
+  const ai =
+    pausedUntil > Date.now()
+      ? `🟠 AI paused until ${new Date(pausedUntil).toISOString().slice(11, 16)} UTC (keyword fallback active)`
+      : '🟢 AI classification active';
+  lines.push('', ai);
+  lines.push(
+    `Incidents (24h): ${c?.today ?? 0} (${c?.merged ?? 0} multi-source) · waiting for AI: ${c?.queue ?? 0} · queued messages: ${c?.pending ?? 0}`,
+  );
   return lines.join('\n');
 }

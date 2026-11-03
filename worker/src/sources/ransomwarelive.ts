@@ -1,4 +1,4 @@
-import { conditionalGet, hash, validators } from '../http';
+import { conditionalGet, hash, readFeedHead, validators } from '../http';
 import type { Item } from '../types';
 import { parseDate, parseFeed, type RawFeedEntry } from '../xml';
 import type { Source } from './types';
@@ -79,7 +79,7 @@ export const ransomwareLiveSource: Source = {
   name: 'ransomware.live',
   label: 'ransomware.live',
   async run(env, state) {
-    const max = 40;
+    const max = 25; // ~65 posts/day, checked every 15 min → 1–3 new per run
     if (env.RANSOMWARE_LIVE_API_KEY) {
       const res = await conditionalGet(env, `${RL_PRO_BASE}/victims/recent`, null, {
         'X-API-KEY': env.RANSOMWARE_LIVE_API_KEY,
@@ -96,6 +96,6 @@ export const ransomwareLiveSource: Source = {
     }
     const res = await conditionalGet(env, RL_RSS_URL, state);
     if (!res) return { items: null };
-    return { items: parseRansomwareLiveRss(await res.text(), max), ...validators(res) };
+    return { items: parseRansomwareLiveRss(await readFeedHead(res, max), max), ...validators(res) };
   },
 };

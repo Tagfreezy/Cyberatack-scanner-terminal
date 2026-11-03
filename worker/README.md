@@ -8,12 +8,15 @@ Cloudflare Worker (TypeScript, free plan). Setup is in the [top-level README](..
 src/
   index.ts            HTTP routes (webhook, /admin/*) + scheduled() entry
   scheduler.ts        which sources run on which 5-minute tick; daily cleanup
-  pipeline.ts         per-source: fetch → skip seen → score → store → queue alert (never throws)
-  scoring.ts          keyword pre-filter + severity/attack-type scoring
+  pipeline.ts         stage 1, per source: fetch → skip seen → keyword pre-filter → store 'pending'
+  process.ts          stage 2: AI classify → embed → dedupe into incidents → queue alert / edit
+  ai.ts               Workers AI calls, prompt, strict JSON validation + retry
+  dedupe.ts           CVE / victim-name / cosine matching (pure, tested)
+  scoring.ts          keyword pre-filter + fallback severity/attack-type scoring
   db.ts               D1 helpers (source state, seen-check, batched inserts, settings)
   outbox.ts           rate-limited Telegram delivery with retry/backoff
   xml.ts              tiny RSS/Atom scanner (CPU-cheap)
-  http.ts             conditional GET (ETag / If-Modified-Since), hashing
+  http.ts             conditional GET, streamed feed reading that stops after N items
   sources/
     news.ts           Dark Reading, The Record, The Hacker News, SecurityWeek
     kev.ts            CISA KEV (streamed head only)
@@ -22,7 +25,7 @@ src/
     api.ts            Bot API client
     format.ts         HTML alert formatting (pure, tested)
     webhook.ts        update handler (owner chat only)
-migrations/0001_init.sql   schema for all phases
+migrations/                schema (0001 all phases, 0002 AI/dedupe columns)
 test/                      vitest unit tests + real feed fixtures
 ```
 
@@ -79,3 +82,58 @@ Inspect the local DB:
 
 5 is reserved for the AI (phase 2). Alerts fire at `>= ALERT_THRESHOLD` (default 4); everything
 else is kept for the daily digest (phase 3).
+
+## Phase 2: AI + dedupe
+
+```
+fetch (stage 1) ──► items 'pending' ──► stage 2, ≤4 items per 5-min tick:
+                     │                    1. classify: Llama 3.1 8B → strict JSON (validate, retry once)
+ noise ──► 'filtered'│                       fails / quota out → keyword scoring (never dropped)
+                                          2. embed title + source summary (qwen3-embedding, 1 call)
+                                          3. match an incident from the last 72h:
+                                               same CVE → same victim name → cosine ≥ 0.70
+                                          4. merge (source_count+1, edit the Telegram alert)
+                                             or new incident (alert if severity ≥ threshold)
+```
+
+### AI model choice (eval on 19 real items, 2026-11-03)
+
+| Model | Correct | Invalid JSON | Avg latency |
+|---|---|---|---|
+| `@cf/meta/llama-3.1-8b-instruct-fp8` (chosen) | **18/19** | 0 | 5.2 s |
+| `@cf/meta/llama-3.2-3b-instruct` | 14/19 | 0 | 0.6 s (rated patch notices severity 5) |
+| `@cf/google/gemma-4-26b-a4b-it` | 0/19 | 19 | thinking model, uses the token budget before answering |
+| `@cf/zai-org/glm-4.7-flash` | 0/19 | 19 | same |
+
+Cost ≈ 11 neurons per item → ~1,600 of the free 10,000 neurons/day.
+
+Embeddings: `@cf/qwen/qwen3-embedding-0.6b` (1024 dims) separated same-story pairs (≥ 0.755)
+from different stories on the same topic (≤ 0.632) best of the 4 models tried; threshold 0.70.
+`dedupe.check` log lines show the top scores for every item, for tuning (`npm run tail`).
+
+### Where vectors live
+
+D1 returns BLOBs as JS arrays (too much CPU to compare hundreds of them), so vectors go to
+**Vectorize** (`cyberwatch-incidents`, free: 5M stored dims; vectors expire after 7 days ≈ 800 kept).
+Vectorize applies writes with a lag (≈10 min observed), so incidents from the last 30 min also keep
+their vector in D1 and are compared in-memory. Incidents without a vector (phase-1 ones, failed
+upserts) are embedded by `backfillVectors` twice an hour.
+
+### Leak-site severity
+
+Leak posts keep the strict keyword severity (public-impact victims → 4, else 3). The AI only adds
+sector + summary: in an eval on 28 posts it rated a title-insurance firm "high", and at ~65 posts/day
+that would mean several false alerts daily.
+
+### Free-plan budget per tick (50 subrequests: D1 + fetch + AI + Vectorize + Telegram)
+
+≤2 sources × 4 · stage 2 ≈ 5 + 4 per item · backfill 4 (2×/h) · outbox 1 + 2 per message.
+Measured CPU: 0–4 ms for simple requests, 5–11 ms for a feed run, up to ~35 ms on runs with AI work
+(10 ms is the nominal free limit; none were rejected so far — see top-level README).
+
+### Admin
+
+| Call | Does |
+|---|---|
+| `POST /admin/process` | run stage 2 now (`?backfill` also embeds old incidents) |
+| `POST /admin/ai-eval` | `{model?, items?: [{title, summary, typeHint, meta}], embed?: [texts], embedModel?}` → classifications + similarity matrix |

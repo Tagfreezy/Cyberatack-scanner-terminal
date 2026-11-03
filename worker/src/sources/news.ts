@@ -1,4 +1,4 @@
-import { conditionalGet, hash, validators } from '../http';
+import { conditionalGet, hash, readFeedHead, validators } from '../http';
 import type { Item } from '../types';
 import { parseDate, parseFeed, type RawFeedEntry } from '../xml';
 import type { Source } from './types';
@@ -38,8 +38,8 @@ export const newsSources: Source[] = NEWS_FEEDS.map((f) => ({
   async run(env, state) {
     const res = await conditionalGet(env, f.url, state);
     if (!res) return { items: null };
-    const xml = await res.text();
     const max = Number(env.RSS_MAX_ITEMS) || 20;
+    const xml = await readFeedHead(res, max);
     return { items: parseNewsFeed(f.name, xml, max), ...validators(res) };
   },
 }));

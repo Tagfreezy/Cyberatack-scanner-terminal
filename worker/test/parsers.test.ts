@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { parseKevHead, kevToItem } from '../src/sources/kev';
 import { NEWS_FEEDS, parseNewsFeed } from '../src/sources/news';
 import { parseRansomwareLiveRss, proVictimToItem } from '../src/sources/ransomwarelive';
+import { readFeedHead } from '../src/http';
 import { decodeEntities, parseFeed } from '../src/xml';
 import { fixture } from './helpers';
 
@@ -115,5 +116,36 @@ describe('ransomware.live', () => {
       discovered: '2026-11-03 17:17:32',
     });
     expect(item).toMatchObject({ id: 'rl:bWFybG8taW5jLmNvbUBzZXR0cmE', meta: { country: 'US', sector: 'Manufacturing' } });
+  });
+});
+
+describe('readFeedHead (streamed, cancels early)', () => {
+  function chunked(text: string, size: number): Response {
+    const bytes = new TextEncoder().encode(text);
+    let pulled = 0;
+    const stream = new ReadableStream<Uint8Array>({
+      pull(ctrl) {
+        if (pulled >= bytes.length) return ctrl.close();
+        ctrl.enqueue(bytes.slice(pulled, pulled + size));
+        pulled += size;
+      },
+    });
+    return new Response(stream);
+  }
+
+  it('stops after N items, even with tags split across chunks', async () => {
+    const xml = fixture('ransomwarelive.xml'); // 30 items
+    for (const size of [7, 100, 4096]) {
+      const head = await readFeedHead(chunked(xml, size), 10);
+      const items = parseRansomwareLiveRss(head, 40);
+      expect(items.length).toBeGreaterThanOrEqual(10);
+      expect(items.length).toBeLessThan(30);
+      expect(items[0]!.meta.victim).toBe('marlo-inc.com');
+    }
+  });
+
+  it('returns the whole body when it has fewer items than asked', async () => {
+    const xml = fixture('therecord.xml'); // 5 items
+    expect(parseNewsFeed('therecord', await readFeedHead(chunked(xml, 512), 20), 20)).toHaveLength(5);
   });
 });
