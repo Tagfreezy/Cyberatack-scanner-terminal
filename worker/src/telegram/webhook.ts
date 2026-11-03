@@ -46,6 +46,11 @@ export async function handleUpdate(env: Env, update: TgUpdate): Promise<void> {
   }
 }
 
+/** 3× each source's schedule (see scheduler.ts): news 20 min, ransomware.live 15 min, KEV 1 h. */
+export function staleAfterMs(source: string): number {
+  return source === 'cisa-kev' ? 3 * 3600_000 : 3600_000;
+}
+
 function ago(ms: number | null): string {
   if (!ms) return 'never';
   const m = Math.round((Date.now() - ms) / 60000);
@@ -71,9 +76,16 @@ async function statusText(env: Env): Promise<string> {
 
   const lines = ['<b>Sources</b>'];
   for (const r of results) {
-    const healthy = (r.last_ok ?? 0) >= (r.last_error_at ?? 0);
-    const detail = healthy ? `ok ${ago(r.last_ok)}` : `error ${ago(r.last_error_at)}: ${escapeHtml(r.last_error ?? '')}`;
-    lines.push(`${healthy ? '🟢' : '🔴'} ${escapeHtml(sourceLabel(r.source))} — ${detail}`);
+    const failing = (r.last_error_at ?? 0) > (r.last_ok ?? 0);
+    // A run killed by Cloudflare (e.g. CPU limit) never records an error, so "no success for
+    // 3× the normal interval" also counts as unhealthy.
+    const stale = Date.now() - (r.last_ok ?? 0) > staleAfterMs(r.source);
+    const detail = failing
+      ? `error ${ago(r.last_error_at)}: ${escapeHtml(r.last_error ?? '')}`
+      : stale
+        ? `no successful run for ${ago(r.last_ok).replace(' ago', '')}`
+        : `ok ${ago(r.last_ok)}`;
+    lines.push(`${failing || stale ? '🔴' : '🟢'} ${escapeHtml(sourceLabel(r.source))} — ${detail}`);
   }
   if (!results.length) lines.push('(no runs yet)');
   const pausedUntil = Number(c?.ai_paused_until ?? 0);
