@@ -3,12 +3,15 @@ import { editMessageText, sendMessage, TelegramError } from './telegram/api';
 import { formatAlert, type IncidentView } from './telegram/format';
 import type { Env } from './types';
 
-interface OutboxRow {
-  id: number;
+// Rows come joined with their incident, so delivering N messages costs 1 + N D1 queries
+// (+ N Telegram calls) — it shares the 50-subrequest budget with everything else.
+interface OutboxRow extends Partial<IncidentView> {
+  outbox_id: number;
   kind: 'alert' | 'edit' | 'text';
   incident_id: number | null;
   payload: string;
   attempts: number;
+  telegram_message_id: number | null;
 }
 
 const MAX_ATTEMPTS = 5;
@@ -16,14 +19,17 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 /**
  * Send up to N queued Telegram messages, ~1/s. Waiting doesn't count toward the 10 ms CPU
- * limit, and capping N keeps us far below 50 subrequests. Leftovers go out next run.
+ * limit. Leftovers go out on the next run.
  */
 export async function drainOutbox(env: Env, now = Date.now()): Promise<{ sent: number; failed: number }> {
-  const max = Number(env.MAX_TELEGRAM_SENDS_PER_RUN) || 5;
+  const max = Number(env.MAX_TELEGRAM_SENDS_PER_RUN) || 4;
   const { results } = await env.DB.prepare(
-    `SELECT id, kind, incident_id, payload, attempts FROM outbox
-     WHERE sent_at IS NULL AND next_attempt_at <= ? AND attempts < ?
-     ORDER BY id LIMIT ?`,
+    `SELECT o.id AS outbox_id, o.kind, o.incident_id, o.payload, o.attempts,
+            i.id, i.title, i.summary, i.url, i.attack_type, i.sector, i.country, i.severity,
+            i.source_count, i.sources, i.group_name, i.victim, i.telegram_message_id
+     FROM outbox o LEFT JOIN incidents i ON i.id = o.incident_id
+     WHERE o.sent_at IS NULL AND o.next_attempt_at <= ? AND o.attempts < ?
+     ORDER BY o.id LIMIT ?`,
   )
     .bind(now, MAX_ATTEMPTS, max)
     .all<OutboxRow>();
@@ -33,21 +39,25 @@ export async function drainOutbox(env: Env, now = Date.now()): Promise<{ sent: n
   for (const [i, row] of results.entries()) {
     if (i > 0) await sleep(1100);
     try {
-      await deliver(env, row);
-      await env.DB.prepare('UPDATE outbox SET sent_at = ?, attempts = attempts + 1 WHERE id = ?')
-        .bind(Date.now(), row.id)
-        .run();
+      const messageId = await deliver(env, row);
+      const done = env.DB.prepare('UPDATE outbox SET sent_at = ?, attempts = attempts + 1 WHERE id = ?').bind(Date.now(), row.outbox_id);
+      if (messageId && row.incident_id) {
+        await env.DB.batch([
+          done,
+          env.DB.prepare("UPDATE incidents SET telegram_message_id = ?, alert_state = 'sent' WHERE id = ?").bind(messageId, row.incident_id),
+        ]);
+      } else {
+        await done.run();
+      }
       sent++;
     } catch (err) {
       failed++;
       const retryAfter = err instanceof TelegramError && err.retryAfter ? err.retryAfter * 1000 : 0;
       const backoff = Math.max(retryAfter, 60_000 * 2 ** row.attempts);
-      await env.DB.prepare(
-        'UPDATE outbox SET attempts = attempts + 1, last_error = ?, next_attempt_at = ? WHERE id = ?',
-      )
-        .bind(String(err instanceof Error ? err.message : err).slice(0, 300), Date.now() + backoff, row.id)
+      await env.DB.prepare('UPDATE outbox SET attempts = attempts + 1, last_error = ?, next_attempt_at = ? WHERE id = ?')
+        .bind(String(err instanceof Error ? err.message : err).slice(0, 300), Date.now() + backoff, row.outbox_id)
         .run();
-      logError('outbox.fail', err, { outbox_id: row.id, kind: row.kind });
+      logError('outbox.fail', err, { outbox_id: row.outbox_id, kind: row.kind });
       // Rate-limited: stop this run, the rest will wait anyway.
       if (err instanceof TelegramError && err.code === 429) break;
     }
@@ -56,37 +66,27 @@ export async function drainOutbox(env: Env, now = Date.now()): Promise<{ sent: n
   return { sent, failed };
 }
 
-async function loadIncident(env: Env, id: number): Promise<(IncidentView & { telegram_message_id: number | null }) | null> {
-  return env.DB.prepare(
-    `SELECT id, title, summary, url, attack_type, sector, country, severity, source_count, sources,
-            group_name, victim, telegram_message_id FROM incidents WHERE id = ?`,
-  )
-    .bind(id)
-    .first();
-}
-
-async function deliver(env: Env, row: OutboxRow): Promise<void> {
+/** Returns the new Telegram message id for a sent alert, else null. */
+async function deliver(env: Env, row: OutboxRow): Promise<number | null> {
   if (row.kind === 'text') {
     const p = JSON.parse(row.payload) as { text: string };
     await sendMessage(env, p.text);
-    return;
+    return null;
   }
-  const inc = row.incident_id ? await loadIncident(env, row.incident_id) : null;
-  if (!inc) return; // incident deleted: nothing to send, mark done
+  if (!row.id) return null; // incident deleted: nothing to send, mark done
 
-  // Built from the *current* incident row, so a queued alert already shows the latest source count.
-  const text = formatAlert(inc);
-  if (row.kind === 'edit' && inc.telegram_message_id) {
+  // Rendered from the *current* incident row, so a queued alert already shows the latest source count.
+  const text = formatAlert(row as IncidentView);
+  if (row.kind === 'edit') {
+    if (!row.telegram_message_id) return null;
     try {
-      await editMessageText(env, inc.telegram_message_id, text);
+      await editMessageText(env, row.telegram_message_id, text);
     } catch (err) {
       // "message is not modified" is fine; anything else bubbles up for retry.
       if (!(err instanceof TelegramError && /not modified/i.test(err.message))) throw err;
     }
-    return;
+    return null;
   }
   const msg = await sendMessage(env, text);
-  await env.DB.prepare("UPDATE incidents SET telegram_message_id = ?, alert_state = 'sent' WHERE id = ?")
-    .bind(msg.message_id, inc.id)
-    .run();
+  return msg.message_id;
 }

@@ -19,12 +19,27 @@
     }
   ],
 
+  // Workers AI (classification + embeddings). Always runs remotely, even in `wrangler dev`.
+  "ai": { "binding": "AI" },
+
+  // Incident embeddings for dedupe (1024 dims, cosine). Created with:
+  //   wrangler vectorize create cyberwatch-incidents --dimensions=1024 --metric=cosine
+  //   wrangler vectorize create-metadata-index cyberwatch-incidents --propertyName=first_seen --type=number
+  // No local emulation exists, so `wrangler dev` uses the real index ("remote": true).
+  "vectorize": [{ "binding": "VECTORS", "index_name": "cyberwatch-incidents", "remote": true }],
+
   // Non-secret settings. Secrets go in `.dev.vars` (local) / `wrangler secret put` (prod).
   "vars": {
+    // Models picked by an eval on real headlines (see worker/README.md, "AI model choice").
+    "AI_MODEL": "@cf/meta/llama-3.1-8b-instruct-fp8",
+    "EMBED_MODEL": "@cf/qwen/qwen3-embedding-0.6b",
+    // Same-story duplicates scored ≥0.755, different stories ≤0.632 in the eval.
+    "SIM_THRESHOLD": "0.70",
+    "AI_ITEMS_PER_RUN": "4",
     "ALERT_THRESHOLD": "4",
     "TIMEZONE": "Europe/Zurich",
     "USER_AGENT": "cyberwatch/1.0",
-    "MAX_TELEGRAM_SENDS_PER_RUN": "5",
+    "MAX_TELEGRAM_SENDS_PER_RUN": "4",
     "RSS_MAX_ITEMS": "20"
   },
 

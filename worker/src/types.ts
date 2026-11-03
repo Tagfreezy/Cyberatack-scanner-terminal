@@ -1,5 +1,12 @@
 export interface Env {
   DB: D1Database;
+  AI: Ai;
+  VECTORS: VectorizeIndex;
+
+  AI_MODEL: string;
+  EMBED_MODEL: string;
+  SIM_THRESHOLD: string;
+  AI_ITEMS_PER_RUN: string;
 
   // vars (wrangler.jsonc)
   ALERT_THRESHOLD: string;

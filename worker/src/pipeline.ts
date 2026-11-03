@@ -1,4 +1,4 @@
-import { getSourceState, getThreshold, itemStatements, markSourceError, markSourceOk, seenIds } from './db';
+import { getSourceState, itemStatements, markSourceError, sourceOkStatement, seenIds } from './db';
 import { log, logError } from './log';
 import { scoreItem } from './scoring';
 import type { Source } from './sources/types';
@@ -11,15 +11,17 @@ export interface SourceRunReport {
   baseline?: boolean;
   fetched?: number;
   fresh?: number;
-  incidents?: number;
-  alerts?: number;
+  pending?: number;
+  filtered?: number;
   error?: string;
   ms: number;
 }
 
 /**
- * Fetch → normalize → skip seen → keyword score → store → queue alerts, for ONE source.
+ * Stage 1, for ONE source: fetch → normalize → skip seen → keyword pre-filter → store.
+ * New items are stored as 'pending'; process.ts classifies them (AI) a few per tick.
  * Never throws: a broken source is logged + recorded in source_state and the others go on.
+ * D1 cost: state + seen-check + one batch = 3 queries (+1 fetch).
  */
 export async function runSource(env: Env, source: Source, now = Date.now()): Promise<SourceRunReport> {
   const t0 = Date.now();
@@ -28,7 +30,7 @@ export async function runSource(env: Env, source: Source, now = Date.now()): Pro
     const result = await source.run(env, state);
 
     if (result.items === null) {
-      await markSourceOk(env.DB, source.name, { ...result, fetched: 0, fresh: 0 }, now);
+      await sourceOkStatement(env.DB, source.name, { ...result, fetched: 0, fresh: 0 }, now).run();
       const r = { source: source.name, ok: true, notModified: true, ms: Date.now() - t0 };
       log('source.run', r);
       return r;
@@ -38,38 +40,32 @@ export async function runSource(env: Env, source: Source, now = Date.now()): Pro
     const seen = await seenIds(env.DB, items.map((i) => i.id));
     const fresh = items.filter((i) => !seen.has(i.id));
 
-    // First successful run for a source: store everything silently, so a fresh deploy
-    // doesn't flood the chat with ~100 "new" items that are actually days old.
+    // First successful run for a source: store everything silently (keyword-scored, no AI,
+    // no alerts), so a fresh deploy doesn't flood the chat or burn AI quota on old news.
     const baseline = !state || state.initialized === 0;
-    const threshold = await getThreshold(env);
 
     const stmts: D1PreparedStatement[] = [];
-    let incidents = 0;
-    let alerts = 0;
+    let pending = 0;
+    let filtered = 0;
     for (const item of fresh) {
       const score = scoreItem(item);
-      const status = baseline ? 'baseline' : score.isIncident ? 'scored' : 'filtered';
-      const alertState = baseline ? 'baseline' : score.severity >= threshold ? 'queued' : 'digest';
-      if (score.isIncident) incidents++;
-      if (score.isIncident && alertState === 'queued') alerts++;
-      stmts.push(...itemStatements(env.DB, item, score, status, alertState, now));
+      if (baseline) {
+        stmts.push(...itemStatements(env.DB, item, score, 'baseline', 'baseline', now));
+      } else if (score.reasons[0] === 'noise') {
+        // Pre-filter: webinars, funding news, sponsored posts... never reach the AI.
+        filtered++;
+        stmts.push(...itemStatements(env.DB, item, { ...score, isIncident: false }, 'filtered', 'digest', now));
+      } else {
+        pending++;
+        stmts.push(...itemStatements(env.DB, item, null, 'pending', 'digest', now));
+      }
     }
-    if (stmts.length) await env.DB.batch(stmts);
+    // Validators are saved in the same batch as the items: if the insert fails, the next run
+    // re-fetches instead of getting a 304 and losing those items for good.
+    stmts.push(sourceOkStatement(env.DB, source.name, { ...result, fetched: items.length, fresh: fresh.length }, now));
+    await env.DB.batch(stmts);
 
-    // Validators are saved only now, after the items are stored: if anything above failed,
-    // the next run re-fetches instead of getting a 304 and losing those items for good.
-    await markSourceOk(env.DB, source.name, { ...result, fetched: items.length, fresh: fresh.length }, now);
-
-    const r = {
-      source: source.name,
-      ok: true,
-      baseline,
-      fetched: items.length,
-      fresh: fresh.length,
-      incidents,
-      alerts,
-      ms: Date.now() - t0,
-    };
+    const r = { source: source.name, ok: true, baseline, fetched: items.length, fresh: fresh.length, pending, filtered, ms: Date.now() - t0 };
     log('source.run', r);
     return r;
   } catch (err) {

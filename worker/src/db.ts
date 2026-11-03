@@ -1,3 +1,4 @@
+import { victimKey } from './dedupe';
 import type { Env, Item, Score, SourceState } from './types';
 
 export async function getSourceState(db: D1Database, source: string): Promise<SourceState | null> {
@@ -7,14 +8,15 @@ export async function getSourceState(db: D1Database, source: string): Promise<So
     .first<SourceState>();
 }
 
-export async function markSourceOk(
+/** Statement marking a source run as successful (run alone, or inside a batch). */
+export function sourceOkStatement(
   db: D1Database,
   source: string,
   v: { etag?: string | null; lastModified?: string | null; extra?: unknown; fetched: number; fresh: number },
   now: number,
-): Promise<void> {
+): D1PreparedStatement {
   // COALESCE keeps the old validators when the response (e.g. a 304) didn't send new ones.
-  await db
+  return db
     .prepare(
       `INSERT INTO source_state (source, etag, last_modified, initialized, last_run, last_ok, last_fetched, last_new, extra)
        VALUES (?1, ?2, ?3, 1, ?4, ?4, ?5, ?6, ?7)
@@ -30,8 +32,7 @@ export async function markSourceOk(
       v.fetched,
       v.fresh,
       v.extra === undefined ? null : JSON.stringify(v.extra),
-    )
-    .run();
+    );
 }
 
 export async function markSourceError(db: D1Database, source: string, err: string, now: number): Promise<void> {
@@ -87,7 +88,7 @@ export function itemStatements(
   db: D1Database,
   item: Item,
   score: Score | null,
-  status: 'baseline' | 'filtered' | 'scored',
+  status: 'baseline' | 'filtered' | 'pending',
   alertState: AlertState,
   now: number,
 ): D1PreparedStatement[] {
@@ -99,8 +100,8 @@ export function itemStatements(
       db
         .prepare(
           `INSERT INTO incidents (title, summary, url, attack_type, victim, group_name, vendor, sector, country,
-             severity, source_count, sources, classified_by, first_seen, last_seen, alert_state)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, 'keywords', ?, ?, ?)`,
+             severity, source_count, sources, classified_by, first_seen, last_seen, alert_state, cve, victim_key)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, 'keywords', ?, ?, ?, ?, ?)`,
         )
         .bind(
           item.title,
@@ -117,6 +118,9 @@ export function itemStatements(
           now,
           now,
           alertState,
+          item.meta.cve ?? null,
+          // Only leak posts carry a real victim name from the source itself.
+          item.typeHint === 'leak' ? victimKey(item.meta.victim) : null,
         ),
     );
   }

@@ -1,11 +1,14 @@
 import { log, logError } from './log';
 import { drainOutbox } from './outbox';
 import { runSource } from './pipeline';
+import { backfillVectors, processPending } from './process';
 import { ALL_SOURCES, runScheduled } from './scheduler';
 import { sendMessage, tg } from './telegram/api';
 import { formatAlert } from './telegram/format';
 import { handleUpdate, type TgUpdate } from './telegram/webhook';
-import type { Env } from './types';
+import { classify, embed } from './ai';
+import { cosine } from './dedupe';
+import type { Env, Item } from './types';
 
 const json = (data: unknown, status = 200) =>
   new Response(JSON.stringify(data, null, 2), { status, headers: { 'Content-Type': 'application/json' } });
@@ -71,8 +74,17 @@ export default {
       if (!list.length) return json({ error: `unknown source; use one of: ${ALL_SOURCES.map((s) => s.name).join(', ')}` }, 400);
       const reports = [];
       for (const s of list) reports.push(await runSource(env, s));
+      const processed = await processPending(env);
       const outbox = await drainOutbox(env);
-      return json({ reports, outbox });
+      return json({ reports, processed, outbox });
+    }
+
+    // Classify/dedupe a few pending items now (same as one cron tick's stage 2).
+    if (path === '/admin/process' && req.method === 'POST') {
+      const processed = await processPending(env);
+      const backfilled = url.searchParams.has('backfill') ? await backfillVectors(env) : undefined;
+      const outbox = await drainOutbox(env);
+      return json({ processed, backfilled, outbox });
     }
 
     // Point Telegram at this worker + register commands. Saves pasting the bot token into curl.
@@ -89,6 +101,33 @@ export default {
       return json({ ok: true, webhook: hook, info });
     }
 
+    // Try the classifier/embeddings on arbitrary items, e.g. to compare models or tune thresholds.
+    // Body: { model?, items?: Item-like[], embed?: string[] }
+    if (path === '/admin/ai-eval' && req.method === 'POST') {
+      const body = (await req.json()) as { model?: string; items?: Partial<Item>[]; embed?: string[]; embedModel?: string };
+      const model = body.model ?? env.AI_MODEL;
+      const results = [];
+      for (const raw of body.items ?? []) {
+        const item: Item = { id: 'eval', source: 'eval', title: '', url: null, publishedAt: null, summary: '', typeHint: 'news', meta: {}, ...raw };
+        const t0 = Date.now();
+        let out: unknown;
+        try {
+          out = await classify(env, item, model);
+        } catch (e) {
+          out = { error: e instanceof Error ? e.message : String(e) };
+        }
+        results.push({ title: item.title, ms: Date.now() - t0, out });
+      }
+      let similarity: number[][] | undefined;
+      let dims: number | undefined;
+      if (body.embed?.length) {
+        const vecs = await embed({ ...env, EMBED_MODEL: body.embedModel ?? env.EMBED_MODEL }, body.embed);
+        dims = vecs[0]?.length;
+        similarity = vecs.map((a) => vecs.map((b) => Math.round(cosine(a, b) * 1000) / 1000));
+      }
+      return json({ model, results, dims, similarity });
+    }
+
     if (path === '/admin/status' && req.method === 'GET') {
       const sources = await env.DB.prepare('SELECT * FROM source_state ORDER BY source').all();
       const counts = await env.DB.prepare(
@@ -101,9 +140,11 @@ export default {
     return json({ error: 'not found' }, 404);
   },
 
-  async scheduled(controller: ScheduledController, env: Env, ctx: ExecutionContext): Promise<void> {
-    ctx.waitUntil(runScheduled(env, controller.scheduledTime).catch((e) => logError('tick', e)));
+  // Awaited directly (not waitUntil): scheduled handlers get up to 15 min of wall time, but
+  // waitUntil work may be cut off ~30 s after the handler returns. AI items take ~5 s each.
+  async scheduled(controller: ScheduledController, env: Env): Promise<void> {
     log('scheduled', { cron: controller.cron });
+    await runScheduled(env, controller.scheduledTime).catch((e) => logError('tick', e));
   },
 } satisfies ExportedHandler<Env>;
 
