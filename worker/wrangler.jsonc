@@ -35,7 +35,9 @@
     "EMBED_MODEL": "@cf/qwen/qwen3-embedding-0.6b",
     // Same-story duplicates scored ≥0.755, different stories ≤0.632 in the eval.
     "SIM_THRESHOLD": "0.70",
-    "AI_ITEMS_PER_RUN": "4",
+    // 2 per 5-min tick = ~576/day capacity vs ~140/day needed. Measured: each item adds only
+    // ~2 ms CPU; most of a run's CPU is fixed overhead (cold start, D1/JSON handling).
+    "AI_ITEMS_PER_RUN": "2",
     "ALERT_THRESHOLD": "4",
     "TIMEZONE": "Europe/Zurich",
     "USER_AGENT": "cyberwatch/1.0",

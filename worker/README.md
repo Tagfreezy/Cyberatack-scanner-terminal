@@ -86,7 +86,7 @@ else is kept for the daily digest (phase 3).
 ## Phase 2: AI + dedupe
 
 ```
-fetch (stage 1) ──► items 'pending' ──► stage 2, ≤4 items per 5-min tick:
+fetch (stage 1) ──► items 'pending' ──► stage 2, ≤2 items per 5-min tick:
                      │                    1. classify: Llama 3.1 8B → strict JSON (validate, retry once)
  noise ──► 'filtered'│                       fails / quota out → keyword scoring (never dropped)
                                           2. embed title + source summary (qwen3-embedding, 1 call)
@@ -128,8 +128,9 @@ that would mean several false alerts daily.
 ### Free-plan budget per tick (50 subrequests: D1 + fetch + AI + Vectorize + Telegram)
 
 ≤2 sources × 4 · stage 2 ≈ 5 + 4 per item · backfill 4 (2×/h) · outbox 1 + 2 per message.
-Measured CPU: 0–4 ms for simple requests, 5–11 ms for a feed run, up to ~35 ms on runs with AI work
-(10 ms is the nominal free limit; none were rejected so far — see top-level README).
+Measured CPU: 0–4 ms for simple requests, 5–20 ms for a feed run, 4–19 ms with 1–4 AI items.
+Each AI item adds only ~2 ms; the rest is fixed per-run overhead, so AI_ITEMS_PER_RUN=2 trims the
+peak a little but can't get every run under the nominal 10 ms (none were rejected so far).
 
 ### Admin
 

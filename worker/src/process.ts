@@ -9,7 +9,7 @@ import type { AttackType, Env, Item, ItemMeta } from './types';
 //
 // Subrequest budget (free plan: 50 per invocation, shared by D1, fetch, AI, Vectorize):
 //   fixed ≈ 5 (settings, pending, candidates, embed, upsert) + per item ≈ 4
-//   (classify + 1 retry, Vectorize query, D1 batch). AI_ITEMS_PER_RUN=4 → ~21, leaving
+//   (classify + 1 retry, Vectorize query, D1 batch). AI_ITEMS_PER_RUN=2 → ~13, leaving
 //   room for 2 source fetches (~8) and the Telegram outbox (~9). Backlog drains next tick.
 
 const RECENT_VECTOR_MS = 30 * 60_000;
@@ -145,9 +145,14 @@ export interface ProcessReport {
  * @param deadline no NEW item is started after this time (the 8B model takes ~5 s per
  * item); unstarted items stay 'pending' and are picked up next tick.
  */
-export async function processPending(env: Env, now = Date.now(), deadline = now + 30_000): Promise<ProcessReport> {
+export async function processPending(
+  env: Env,
+  now = Date.now(),
+  deadline = now + 30_000,
+  limitOverride?: number,
+): Promise<ProcessReport> {
   const report: ProcessReport = { processed: 0, incidents: 0, merged: 0, rejected: 0, alerts: 0, edits: 0, aiUsed: 0, fallback: 0, aiPaused: false };
-  const limit = Number(env.AI_ITEMS_PER_RUN) || 4;
+  const limit = limitOverride ?? (Number(env.AI_ITEMS_PER_RUN) || 2);
   const simThreshold = Number(env.SIM_THRESHOLD) || 0.7;
 
   const { results: pending } = await env.DB.prepare(

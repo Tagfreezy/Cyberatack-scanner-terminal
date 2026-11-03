@@ -80,10 +80,12 @@ export default {
     }
 
     // Classify/dedupe a few pending items now (same as one cron tick's stage 2).
+    // ?n=K overrides AI_ITEMS_PER_RUN for this call (used to measure CPU per item).
     if (path === '/admin/process' && req.method === 'POST') {
-      const processed = await processPending(env);
+      const n = Number(url.searchParams.get('n'));
+      const processed = await processPending(env, Date.now(), undefined, n > 0 && n <= 6 ? n : undefined);
       const backfilled = url.searchParams.has('backfill') ? await backfillVectors(env) : undefined;
-      const outbox = await drainOutbox(env);
+      const outbox = url.searchParams.has('nosend') ? 'skipped' : await drainOutbox(env);
       return json({ processed, backfilled, outbox });
     }
 
